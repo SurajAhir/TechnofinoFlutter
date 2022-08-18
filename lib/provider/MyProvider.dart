@@ -1,6 +1,9 @@
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:technofino/data_classes/pagination/Pagination.dart';
+
+import '../shared_preferences/DarkThemePreference.dart';
 
 class MyProvider extends ChangeNotifier{
 
@@ -71,4 +74,54 @@ class MyProvider extends ChangeNotifier{
     this.isReacted=val;
     notifyListeners();
   }
+
+  var language="English";
+  setLanguage(String val){
+    language=val;
+    notifyListeners();
+  }
+
+
+  //*************ThemeWork
+  late DarkThemePreference darkThemePreference;
+  late bool _darkTheme;
+  bool get darkTheme => _darkTheme;
+  MyProvider(){
+    darkThemePreference=DarkThemePreference();
+    _darkTheme=false;
+    getThemePreferences();
+    checkNetwork();
+  }
+  set darkTheme(bool value) {
+    _darkTheme = value;
+    darkThemePreference.setDarkTheme(value);
+    notifyListeners();
+  }
+  getThemePreferences() async{
+    _darkTheme=await darkThemePreference.getTheme();
+    notifyListeners();
+  }
+  //End of Themework
+
+
+//Connectivity check************
+  var isNetworkAvail;
+  bool isNetworkAvailable(){
+    checkNetwork();
+    return isNetworkAvail;
+  }
+  checkNetwork() async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      isNetworkAvail=true;
+      notifyListeners();
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      isNetworkAvail=true;
+      notifyListeners();
+    }else{
+      isNetworkAvail=false;
+      notifyListeners();
+    }
+  }
+
 }

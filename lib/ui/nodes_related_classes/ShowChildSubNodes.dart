@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:technofino/data_classes/Nodes.dart';
+import 'package:provider/provider.dart';
+import '../../data_classes/forume_data/Nodes.dart';
+import '../../provider/MyProvider.dart';
 import 'ShowThreads.dart';
 
 class ShowChildSubNodes extends StatefulWidget {
@@ -22,54 +25,58 @@ class ShowChildSubNodes extends StatefulWidget {
 class _ShowChildSubNodesState extends State<ShowChildSubNodes> {
   @override
   Widget build(BuildContext context) {
+    var provider=Provider.of<MyProvider>(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           title: Text(
             "${widget.appBarTitle}",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold),
           ),
-          backgroundColor: Colors.white24,iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor:Theme.of(context).bottomAppBarColor,iconTheme: IconThemeData(color: Theme.of(context).accentColor),
           centerTitle: false,
         ),
-        body: ListView.builder(
+        body:ListView.builder(
             itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.only(bottom: 8, top: 5),
-                child: ListTile(
-                  leading: Icon(Icons.messenger_outline),
-                  title: InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) =>
-                                ShowThreads(
-                                    widget.title,
-                                    widget.list1forChildSubNode![index].title.toString(),
-                                    widget.list1forChildSubNode![index].description.toString(),
-                                    widget.list1forChildSubNode![index].node_id,
-                                    widget.list1forChildSubNode![index].type_data
-                                )));
-                      },
-                      child: Text(
-                        widget.list1forChildSubNode![index].title.toString(),
-                        style: const TextStyle(color: Colors.black),
-                      )),
-                  subtitle: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          "${widget.list1forChildSubNode![index].description.toString()}"),
-                      Text(
-                        "Discussions: ${widget.list1forChildSubNode![index].type_data.discussion_count.toString()} · "
-                        "Messages: ${NumberFormat.compact().format(widget.list1forChildSubNode![index].type_data.message_count)}",
-                        style: TextStyle(fontSize: 12),
-                      )
-                    ],
+              return InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) =>
+                          ShowThreads(
+                              widget.title,
+                              widget.list1forChildSubNode![index].title.toString(),
+                              widget.list1forChildSubNode![index].description.toString(),
+                              widget.list1forChildSubNode![index].node_id,
+                              widget.list1forChildSubNode![index].type_data
+                          )));
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 8, top: 5),
+                  child: ListTile(
+                    leading: Icon(Icons.messenger_outline),
+                    title: Text(
+                      widget.list1forChildSubNode![index].title.toString(),
+                      style: TextStyle(color: Theme.of(context).accentColor),
+                    ),
+                    subtitle: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            "${widget.list1forChildSubNode![index].description.toString()}"),
+                        Text(
+                          "discussions".tr+": ${widget.list1forChildSubNode![index].type_data.discussion_count.toString()} · "
+                              "messages".tr+": ${NumberFormat.compact().format(widget.list1forChildSubNode![index].type_data.message_count)}",
+                          style: TextStyle(fontSize: 12),
+                        )
+                      ],
+                    ),
+                    trailing: Icon(Icons.keyboard_arrow_right),
                   ),
-                  trailing: Icon(Icons.keyboard_arrow_right),
                 ),
               );
             },
-            itemCount: widget.list1forChildSubNode!.length));
+            itemCount: widget.list1forChildSubNode!.length)
+    );
   }
 }

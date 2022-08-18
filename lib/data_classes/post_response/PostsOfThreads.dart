@@ -1,7 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:technofino/data_classes/UserData.dart';
+import 'package:technofino/data_classes/thread_response/Threads.dart';
 
 import '../attachment_response/AttachmentsData.dart';
+import '../login_response/UserData.dart';
 import 'TapiReaction.dart';
 
 part 'PostsOfThreads.freezed.dart';
@@ -13,6 +14,7 @@ class PostsOfThreads with _$PostsOfThreads {
   const factory PostsOfThreads({
     @Default("")String message,
     @Default("")String message_parsed,
+    Threads? Thread,
     @Default(0)int position,
     @Default(0)double message_date,
     @Default(0)double post_date,
@@ -30,7 +32,9 @@ class PostsOfThreads with _$PostsOfThreads {
    @Default(false) bool is_staff,
    @Default(false) bool is_admin,
    @Default(false) bool is_super_admin,
-    List<AttachmentsData>? Attachments
+    List<AttachmentsData>? Attachments,
+    @Default("")String view_url,
+    @Default("")String message_state
 })=_PostsOfThreads;
 
 factory PostsOfThreads.fromJson(Map<String, dynamic> json)=>_$PostsOfThreadsFromJson(json);

@@ -22,6 +22,8 @@ _$_Conversations _$$_ConversationsFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String? ?? "",
       user_id: json['user_id'] as int? ?? 0,
       username: json['username'] as String? ?? "",
+      view_url: json['view_url'] as String? ?? "",
+      is_starred: json['is_starred'] as bool? ?? false,
       is_unread: json['is_unread'] as bool? ?? false,
     );
 
@@ -39,5 +41,7 @@ Map<String, dynamic> _$$_ConversationsToJson(_$_Conversations instance) =>
       'title': instance.title,
       'user_id': instance.user_id,
       'username': instance.username,
+      'view_url': instance.view_url,
+      'is_starred': instance.is_starred,
       'is_unread': instance.is_unread,
     };

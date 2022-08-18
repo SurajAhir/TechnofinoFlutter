@@ -1,6 +1,7 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:technofino/data_classes/UserData.dart';
+
+import '../login_response/UserData.dart';
 
 part 'Conversations.g.dart';
 part 'Conversations.freezed.dart';
@@ -19,6 +20,8 @@ class Conversations with _$Conversations{
     @Default("")String title,
     @Default(0)int user_id,
     @Default("")String username,
+    @Default("")String view_url,
+    @Default(false)bool is_starred,
     @Default(false)bool is_unread
 
   }) =_Conversations;

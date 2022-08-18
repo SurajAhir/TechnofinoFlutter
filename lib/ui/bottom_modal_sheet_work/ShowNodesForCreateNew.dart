@@ -3,10 +3,12 @@ import 'dart:collection';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../data_classes/NodeResponse.dart';
-import '../../data_classes/Nodes.dart';
+import 'package:get/get_utils/get_utils.dart';
+import 'package:provider/provider.dart';
+import '../../data_classes/forume_data/NodeResponse.dart';
+import '../../data_classes/forume_data/Nodes.dart';
 import '../../main_data_class/MyDataClass.dart';
+import '../../provider/MyProvider.dart';
 import '../../services/ApiClient.dart';
 import 'ShowChildNodesForCreateNew.dart';
 
@@ -21,18 +23,19 @@ class ShowNodesForCreateNew extends StatefulWidget {
 class _ShowNodesForCreateNewState extends State<ShowNodesForCreateNew> {
   @override
   Widget build(BuildContext context) {
+    var provider=Provider.of<MyProvider>(context);
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-          color: Colors.white),
+          color: Theme.of(context).bottomAppBarColor),
       child: Column(
         children: [
           Container(
             alignment: Alignment.topCenter,
             width: MediaQuery.of(context).size.width,
-            child: Text("Post thread in forum..."),
+            child: Text("post_thread_in_forum".tr),
           ),
           Expanded(child: Container(
             child: FutureBuilder(

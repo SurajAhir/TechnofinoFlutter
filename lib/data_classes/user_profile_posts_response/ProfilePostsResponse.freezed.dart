@@ -20,7 +20,7 @@ ProfilePostsResponse _$ProfilePostsResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ProfilePostsResponse {
-  List<PostsOfThreads> get profile_posts => throw _privateConstructorUsedError;
+  List<ProfilePosts> get profile_posts => throw _privateConstructorUsedError;
   Pagination? get pagination => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +34,7 @@ abstract class $ProfilePostsResponseCopyWith<$Res> {
   factory $ProfilePostsResponseCopyWith(ProfilePostsResponse value,
           $Res Function(ProfilePostsResponse) then) =
       _$ProfilePostsResponseCopyWithImpl<$Res>;
-  $Res call({List<PostsOfThreads> profile_posts, Pagination? pagination});
+  $Res call({List<ProfilePosts> profile_posts, Pagination? pagination});
 
   $PaginationCopyWith<$Res>? get pagination;
 }
@@ -57,7 +57,7 @@ class _$ProfilePostsResponseCopyWithImpl<$Res>
       profile_posts: profile_posts == freezed
           ? _value.profile_posts
           : profile_posts // ignore: cast_nullable_to_non_nullable
-              as List<PostsOfThreads>,
+              as List<ProfilePosts>,
       pagination: pagination == freezed
           ? _value.pagination
           : pagination // ignore: cast_nullable_to_non_nullable
@@ -84,7 +84,7 @@ abstract class _$$_ProfilePostsResponseCopyWith<$Res>
           $Res Function(_$_ProfilePostsResponse) then) =
       __$$_ProfilePostsResponseCopyWithImpl<$Res>;
   @override
-  $Res call({List<PostsOfThreads> profile_posts, Pagination? pagination});
+  $Res call({List<ProfilePosts> profile_posts, Pagination? pagination});
 
   @override
   $PaginationCopyWith<$Res>? get pagination;
@@ -110,7 +110,7 @@ class __$$_ProfilePostsResponseCopyWithImpl<$Res>
       profile_posts: profile_posts == freezed
           ? _value._profile_posts
           : profile_posts // ignore: cast_nullable_to_non_nullable
-              as List<PostsOfThreads>,
+              as List<ProfilePosts>,
       pagination: pagination == freezed
           ? _value.pagination
           : pagination // ignore: cast_nullable_to_non_nullable
@@ -123,15 +123,15 @@ class __$$_ProfilePostsResponseCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ProfilePostsResponse implements _ProfilePostsResponse {
   const _$_ProfilePostsResponse(
-      {required final List<PostsOfThreads> profile_posts, this.pagination})
+      {required final List<ProfilePosts> profile_posts, this.pagination})
       : _profile_posts = profile_posts;
 
   factory _$_ProfilePostsResponse.fromJson(Map<String, dynamic> json) =>
       _$$_ProfilePostsResponseFromJson(json);
 
-  final List<PostsOfThreads> _profile_posts;
+  final List<ProfilePosts> _profile_posts;
   @override
-  List<PostsOfThreads> get profile_posts {
+  List<ProfilePosts> get profile_posts {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_profile_posts);
   }
@@ -176,14 +176,14 @@ class _$_ProfilePostsResponse implements _ProfilePostsResponse {
 
 abstract class _ProfilePostsResponse implements ProfilePostsResponse {
   const factory _ProfilePostsResponse(
-      {required final List<PostsOfThreads> profile_posts,
+      {required final List<ProfilePosts> profile_posts,
       final Pagination? pagination}) = _$_ProfilePostsResponse;
 
   factory _ProfilePostsResponse.fromJson(Map<String, dynamic> json) =
       _$_ProfilePostsResponse.fromJson;
 
   @override
-  List<PostsOfThreads> get profile_posts;
+  List<ProfilePosts> get profile_posts;
   @override
   Pagination? get pagination;
   @override

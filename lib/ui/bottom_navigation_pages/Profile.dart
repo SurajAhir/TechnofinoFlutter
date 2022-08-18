@@ -1,9 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:technofino/ui/MyWebView.dart';
 import 'package:technofino/ui/conversation/ShowConversations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main_data_class/MyDataClass.dart';
+import '../../provider/MyProvider.dart';
+import '../display_related_classes/ChangeAppThem.dart';
+import '../display_related_classes/ChangeLanguage.dart';
+import '../user_profile/ChangeUsername.dart';
 import '../user_profile/UserProfile.dart';
 
 class Profile extends StatefulWidget {
@@ -16,14 +25,17 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    var darkThemeProvider=Provider.of<MyProvider>(context);
+    debugPrint(darkThemeProvider.darkTheme.toString());
     return Scaffold(
-      backgroundColor: Colors.black12,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text(
-          "Account",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          "account".tr,
+          style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).bottomAppBarColor,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -37,39 +49,87 @@ class _ProfileState extends State<Profile> {
                 margin: EdgeInsets.only(left: 15, right: 15),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Colors.white,
+                    color: Theme.of(context).bottomAppBarColor,
                     boxShadow: [
                       BoxShadow(blurRadius: 2, color: Colors.white10)
                     ]),
                 child: Column(
                   children: [
                     ListTile(
-                      leading: MyDataClass.loginResponse!.avatar_urls.o.toString().isNotEmpty
+                      leading: MyDataClass.loginResponse!.avatar_urls.o
+                              .toString()
+                              .isNotEmpty
                           ? InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>UserProfile(MyDataClass.loginResponse!)));
-                        },
-                            child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(
-                            "${MyDataClass.loginResponse!.avatar_urls.o}",
-                        ),
-                      ),
-                          )
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UserProfile(
+                                            MyDataClass.loginResponse!)));
+                              },
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(
+                                  "${MyDataClass.loginResponse!.avatar_urls.o}",
+                                ),
+                              ),
+                            )
                           : CircleAvatar(
-                        radius: 30,
-                        child: Text(
-                          "${MyDataClass.loginResponse!.username.toString().substring(0, 1)}",
-                          style: TextStyle(color: Colors.white),
+                              radius: 30,
+                              child: Text(
+                                "${MyDataClass.loginResponse!.username.toString().substring(0, 1)}",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                      title: Text("${MyDataClass.loginResponse!.username}"),
+                      trailing: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    topLeft: Radius.circular(10)),
+                              ),
+                              context: context,
+                              builder: (context) => Container(
+                                height: 50,padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(color: Theme.of(context).backgroundColor,
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(10),
+                                            topLeft: Radius.circular(10))),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.pop(context);
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>MyWebView("https://www.technofino.in/community/account/account-details")));
+                                      },
+                                      child: Text("account_details".tr),
+                                    ),
+                                    // SizedBox(height: 10,),
+                                    // InkWell(
+                                    //     onTap: (){
+                                    //       Navigator.pop(context);
+                                    //       Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeUsername()));
+                                    //     },
+                                    //     child: Text("change_username".tr))
+                                  ],
+                                ),
+                                  )
+                              //create a custom widget as you want
+                              );
+                        },
+                        child: Image.asset(
+                          "assets/icons/edit_post.png",
+                          width: 24,
+                          height: 24,color: darkThemeProvider.darkTheme?Colors.white:Colors.black,
                         ),
                       ),
-                      title: Text("${MyDataClass.loginResponse!.username}"),
-                      trailing: Image.asset(
-                        "assets/icons/edit_post.png",
-                        width: 24,
-                        height: 24,
-                      ),
-                      subtitle: Text("${MyDataClass.loginResponse!.user_title}"),
+                      subtitle:
+                          Text("${MyDataClass.loginResponse!.user_title}"),
                     ),
                   ],
                 ),
@@ -90,7 +150,7 @@ class _ProfileState extends State<Profile> {
                       },
                       icon: Icon(Icons.login),
                       label: Text(
-                        "Log in",
+                        "log_in".tr,
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -104,7 +164,7 @@ class _ProfileState extends State<Profile> {
                 margin: EdgeInsets.only(left: 15, right: 15),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Colors.white,
+                    color: Theme.of(context).bottomAppBarColor,
                     boxShadow: [
                       BoxShadow(blurRadius: 2, color: Colors.white10)
                     ]),
@@ -128,11 +188,11 @@ class _ProfileState extends State<Profile> {
                             color: Colors.white,
                           ),
                         ),
-                        title: Text("Conversations"),
+                        title: Text("conversations".tr),
                         trailing: Icon(Icons.keyboard_arrow_right),
                       ),
                     ),
-                    ListTile(
+                   /* ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
                             color: Colors.redAccent,
@@ -142,7 +202,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.white,
                         ),
                       ),
-                      title: Text("Following people"),
+                      title: Text("following_people".tr),
                       trailing: Icon(Icons.keyboard_arrow_right),
                     ),
                     ListTile(
@@ -155,7 +215,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.white,
                         ),
                       ),
-                      title: Text("Ignoring people"),
+                      title: Text("ignoring_people".tr),
                       trailing: Icon(Icons.keyboard_arrow_right),
                     ),
                     ListTile(
@@ -170,9 +230,9 @@ class _ProfileState extends State<Profile> {
                             height: 24,
                             color: Colors.white,
                           )),
-                      title: Text("Watched threads"),
+                      title: Text("watched_threads".tr),
                       trailing: Icon(Icons.keyboard_arrow_right),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
@@ -183,22 +243,27 @@ class _ProfileState extends State<Profile> {
               margin: EdgeInsets.only(left: 15, right: 15),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Colors.white,
+                  color:Theme.of(context).bottomAppBarColor,
                   boxShadow: [BoxShadow(blurRadius: 2, color: Colors.white10)]),
               child: Column(
                 children: [
-                  ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.deepOrange,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Icon(
-                        Icons.language,
-                        color: Colors.white,
+                 /* InkWell(
+                    onTap: (){
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>ChangeLanguage()));
+                    },
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.deepOrange,
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        child: Icon(
+                          Icons.language,
+                          color: Colors.white,
+                        ),
                       ),
+                      title: Text("language".tr),
+                      trailing: Icon(Icons.keyboard_arrow_right),
                     ),
-                    title: Text("Language"),
-                    trailing: Icon(Icons.keyboard_arrow_right),
                   ),
                   ListTile(
                     leading: Container(
@@ -210,69 +275,66 @@ class _ProfileState extends State<Profile> {
                         color: Colors.white,
                       ),
                     ),
-                    title: Text("Appearance"),
+                    title: Text("appearance".tr),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                  ListTile(
-                      leading: Container(
-                        width: 23,
-                        height: 23,
-                        decoration: BoxDecoration(
-                            color: Colors.purpleAccent,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        child: Icon(
-                          CupertinoIcons.moon,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      title: Text("Dark Mode"),
-                      trailing: ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(
+                  ),*/
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>ChangeAppThem()));
+                    },
+
+                    child: ListTile(
+                        leading: Container(
+                          width: 23,
+                          height: 23,
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent,
+                              borderRadius: BorderRadius.all(Radius.circular(8))),
+                          child:Icon(
                             CupertinoIcons.moon,
                             color: Colors.white,
+                            size: 20,
                           ),
-                          label: Text("Off"))),
-                  ListTile(
-                    leading: Container(
-                      width: 23,
-                      height: 23,
-                      decoration: BoxDecoration(
-                          color: Colors.purple,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Icon(
-                        Icons.star_border_outlined,
-                        color: Colors.white,
-                        size: 20,
-                      ),
+                        ),
+                        title: Text("dark_mode".tr),
+                        trailing:Container(
+                          width: 80,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Expanded(child: Text(darkThemeProvider.darkTheme?"on".tr:"off".tr,style: TextStyle(fontSize: 12,),)),
+                              Icon(Icons.keyboard_arrow_right)
+                            ],
+                          ),
+                        )
                     ),
-                    title: Text("Rate us on Store"),
-                    trailing: Icon(Icons.keyboard_arrow_right),
                   ),
-                  ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Icon(
-                        Icons.open_in_new,
-                        color: Colors.white,
-                      ),
+
+                  InkWell(
+                    onTap: () async{
+                      var _url="http://YouTube.com/c/Technofino";
+                        if (!await launch(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                    },
+                    child: ListTile(
+                      leading: Image.asset("assets/icons/youtube_icon.png",width: 26,height: 26,),
+                      title: Text("Youtube"),
+                      trailing:Icon(Icons.keyboard_arrow_right) ,
                     ),
-                    title: Text("Open Links in"),
-                    trailing: Container(
-                      width: 95,
-                      height: 23,
-                      child: Row(
-                        children: [
-                          Text(
-                            "In-app Chrome",
-                            style: TextStyle(fontSize: 9),
-                          ),
-                          Icon(Icons.keyboard_arrow_right)
-                        ],
-                      ),
+                  ),
+                  InkWell(
+
+                    onTap: () async{
+                      var _url=Uri.parse("https://www.technofino.in/community/misc/contact");
+                      if (!await launchUrl(_url)) {
+                      throw 'Could not launch $_url';
+                      }
+                    },
+                    child: ListTile(
+                      leading: Image.asset("assets/icons/email.png",width: 26,height: 26,),
+                      title: Text("Contact us"),
+                      trailing:Icon(Icons.keyboard_arrow_right) ,
                     ),
                   )
                 ],
@@ -285,35 +347,45 @@ class _ProfileState extends State<Profile> {
               margin: EdgeInsets.only(left: 15, right: 15),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Colors.white,
+                  color: Theme.of(context).bottomAppBarColor,
                   boxShadow: [BoxShadow(blurRadius: 2, color: Colors.white10)]),
               child: Column(
                 children: [
-                  ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.deepOrange,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Icon(
-                        Icons.error_outline,
-                        color: Colors.white,
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyWebView("https://www.technofino.in/community/help/terms/")));
+                    },
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.deepOrange,
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        child: Icon(
+                          Icons.error_outline,
+                          color: Colors.white,
+                        ),
                       ),
+                      title: Text("terms_and_rules".tr),
+                      trailing: Icon(Icons.keyboard_arrow_right),
                     ),
-                    title: Text("Terms and rules"),
-                    trailing: Icon(Icons.keyboard_arrow_right),
                   ),
-                  ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.pinkAccent,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Icon(
-                        Icons.privacy_tip_outlined,
-                        color: Colors.white,
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyWebView("https://www.technofino.in/community/help/privacy-policy")));
+                    },
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.pinkAccent,
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        child: Icon(
+                          Icons.privacy_tip_outlined,
+                          color: Colors.white,
+                        ),
                       ),
+                      title: Text("privacy_policy".tr),
+                      trailing: Icon(Icons.keyboard_arrow_right),
                     ),
-                    title: Text("Privacy policy"),
-                    trailing: Icon(Icons.keyboard_arrow_right),
                   ),
                 ],
               ),
@@ -327,14 +399,16 @@ class _ProfileState extends State<Profile> {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.remove("isLoggedIn");
                   prefs.remove("email");
-                  MyDataClass.isUserLoggedIn=false;
+                  MyDataClass.isUserLoggedIn = false;
+                  final _googleSignIn = GoogleSignIn();
+                  await _googleSignIn.signOut();
                   Navigator.pushReplacementNamed(context, "/login");
                 },
                 child: Container(
                   margin: EdgeInsets.only(left: 15, right: 15),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Colors.white,
+                      color: Theme.of(context).bottomAppBarColor,
                       boxShadow: [
                         BoxShadow(blurRadius: 2, color: Colors.white10)
                       ]),
@@ -344,13 +418,14 @@ class _ProfileState extends State<Profile> {
                         leading: Container(
                           decoration: BoxDecoration(
                               color: Colors.deepOrange,
-                              borderRadius: BorderRadius.all(Radius.circular(8))),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
                           child: Icon(
                             Icons.logout,
                             color: Colors.white,
                           ),
                         ),
-                        title: Text("Log out"),
+                        title: Text("log_out".tr),
                         trailing: Icon(Icons.keyboard_arrow_right),
                       ),
                     ],
@@ -366,12 +441,12 @@ class _ProfileState extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "App version",
-                    style: TextStyle(fontSize: 12, color: Colors.black),
+                    "app_version".tr,
+                    style: TextStyle(fontSize: 12, color:Theme.of(context).accentColor),
                   ),
                   Text(
                     "2022.07.23 (143)",
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
+                    style: TextStyle(fontSize: 12, color: darkThemeProvider.darkTheme?Colors.white:Color(0xff8c8787)),
                   )
                 ],
               ),
@@ -384,4 +459,5 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
 }

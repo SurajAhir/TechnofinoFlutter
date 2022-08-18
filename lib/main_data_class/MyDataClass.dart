@@ -1,6 +1,6 @@
-import 'package:technofino/data_classes/LoginResponse.dart';
 
-import '../data_classes/UserData.dart';
+
+import '../data_classes/login_response/UserData.dart';
 
 class MyDataClass{
   static String api_key="p-rQmDsW41tBC768faylyvJcd8KOnp3g";
@@ -8,4 +8,6 @@ class MyDataClass{
   static UserData? loginResponse =null;
 
   static var isUserLoggedIn=false;
+
+  static var myUserId=0;
 }

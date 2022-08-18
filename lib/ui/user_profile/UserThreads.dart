@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:technofino/data_classes/UserData.dart';
-
-import '../../data_classes/Threads.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import '../../data_classes/login_response/UserData.dart';
+import '../../data_classes/thread_response/Threads.dart';
 import '../../data_classes/pagination/Pagination.dart';
 import '../../main_data_class/MyDataClass.dart';
 import '../../provider/MyProvider.dart';
@@ -24,6 +25,7 @@ class UserThreads extends StatefulWidget {
 
 class _UserThreadsState extends State<UserThreads> {
   final _scrollControllar = ScrollController();
+  RefreshController _refreshController =RefreshController(initialRefresh: false);
   List<Threads> list = [];
   var isLoadingThreads = false;
   var isFirstLoadingThreads = true;
@@ -57,14 +59,16 @@ class _UserThreadsState extends State<UserThreads> {
 
   @override
   Widget build(BuildContext context) {
+    var provider=Provider.of<MyProvider>(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Theme.of(context).bottomAppBarColor,
+        iconTheme: IconThemeData(color: Theme.of(context).accentColor),
         title: Text(
           "${widget.user.username}",
-          style: const TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
         ),
       ),
       body: Column(
@@ -72,73 +76,85 @@ class _UserThreadsState extends State<UserThreads> {
           isFirstLoadingThreads == false
               ? Expanded(
                   child: Scaffold(
-                    body: ListView.builder(
-                      controller: _scrollControllar,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.all(8),
-                          child: ListTile(
-                            leading: list[index]
-                                    .User
-                                    .avatar_urls
-                                    .o
-                                    .toString()
-                                    .isNotEmpty
-                                ? InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UserProfile(list[index].User)));
-                                    },
-                                    child: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          list[index].User.avatar_urls.o),
-                                    ),
-                                  )
-                                : InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UserProfile(list[index].User)));
-                                    },
-                                    child: CircleAvatar(
-                                      child: Text(
-                                          "${list[index].User.username.substring(0, 1)}"),
-                                    ),
-                                  ),
-                            title: InkWell(
-                                onTap: (){
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    body: SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: false,
+                        controller: _refreshController,
+                        onRefresh: () async{
+                          debugPrint("refrshing...");
+                          page=1;
+                          getData(page);
+                        },
+                      child: ListView.builder(
+                        controller: _scrollControllar,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(left: 5,right: 5,top: 3),
+                            color: Theme.of(context).bottomAppBarColor,
+                            child: ListTile(
+                              leading: list[index]
+                                  .User
+                                  .avatar_urls
+                                  .o
+                                  .toString()
+                                  .isNotEmpty
+                                  ? InkWell(
+                                onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ShowPostsOfThreads(
-                                              list[index].Forum!=null?list[index].Forum!.breadcrumbs![0].title.toString():"",
-                                              list[index].Forum!=null?list[index].Forum!.title:"",
-                                              list[index],1,""
-                                          )));
+                                          builder: (context) =>
+                                              UserProfile(list[index].User)));
                                 },
-                                child: Text("${list[index].title}",style: TextStyle(fontSize: 14),)),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("${list[index].username}",style: TextStyle(fontSize: 12)),
-                                Text(
-                                    "${readTimestamp(list[index].post_date.toInt())} • ${NumberFormat.compact().format(list[index].reply_count)} replies • "
-                                        "${NumberFormat.compact().format(list[index].view_count)} views",style: TextStyle(fontSize: 12))
-                              ],
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      list[index].User.avatar_urls.o),
+                                ),
+                              )
+                                  : InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              UserProfile(list[index].User)));
+                                },
+                                child: CircleAvatar(
+                                  child: Text(
+                                      "${list[index].User.username.substring(0, 1)}"),
+                                ),
+                              ),
+                              title: InkWell(
+                                  onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ShowPostsOfThreads(
+                                                list[index].Forum!=null?list[index].Forum!.breadcrumbs![0].title.toString():"",
+                                                list[index].Forum!=null?list[index].Forum!.title:"",
+                                                list[index],1,""
+                                            )));
+                                  },
+                                  child: Text("${list[index].title}",style: TextStyle(fontSize: 14,color: Theme.of(context).accentColor),)),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("${list[index].username}",style: TextStyle(fontSize: 12)),
+                                  Text(
+                                      "${readTimestamp(list[index].post_date.toInt())} • ${NumberFormat.compact().format(list[index].reply_count)} replies • "
+                                          "${NumberFormat.compact().format(list[index].view_count)} views",style: TextStyle(fontSize: 12))
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      itemCount: list.length,
-                    ),
+                          );
+                        },
+                        itemCount: list.length,
+                      ),
+                    )
                   ),
                 )
-              : isDataAvailable==false? Center(child: CircularProgressIndicator()):Center(child: Text("No Threads Found!")),
+              : isDataAvailable==false? Center(child: CircularProgressIndicator()):Center(child: Text("no_threads_found".tr)),
           if (Provider.of<MyProvider>(context).isLoadingUserThreads)
             const CircularProgressIndicator.adaptive()
         ],
@@ -194,11 +210,18 @@ class _UserThreadsState extends State<UserThreads> {
 
   void getData(int page) async {
     var provider = Provider.of<MyProvider>(context, listen: false);
+    debugPrint("userid${widget.user.user_id} ${MyDataClass.myUserId}${page}");
     var threadResponse =
         await ApiClient(Dio(BaseOptions(contentType: "application/json")))
-            .findAllThreadsBy(MyDataClass.api_key, 625, page, "desc",
+            .findAllThreadsBy(MyDataClass.api_key, MyDataClass.myUserId, page, "desc",
                 "last_post_date", widget.user.user_id);
     pagination = threadResponse.pagination;
+    if(_refreshController.isRefresh){
+      if(threadResponse.threads.isNotEmpty){
+        list.clear();
+      }
+      _refreshController.refreshCompleted();
+    }
     var sticky = threadResponse.sticky;
     if (sticky != null) {
       list.addAll(sticky);

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:technofino/data_classes/Threads.dart';
+import 'package:technofino/data_classes/thread_response/Threads.dart';
 import 'package:technofino/data_classes/pagination/Pagination.dart';
 
 import 'NotificationsData.dart';

@@ -9,7 +9,8 @@ class ForumResponse with _$ForumResponse {
   const factory ForumResponse(
       {
         List<ForumData>? breadcrumbs,
-      @Default("")String title}) = _ForumResponse;
+      @Default("")String title,
+      @Default("")String description}) = _ForumResponse;
 
   factory ForumResponse.fromJson(Map<String, dynamic> json) =>
       _$ForumResponseFromJson(json);

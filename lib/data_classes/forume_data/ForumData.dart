@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../Threads.dart';
+import '../thread_response/Threads.dart';
 
 part 'ForumData.freezed.dart';
 part 'ForumData.g.dart';

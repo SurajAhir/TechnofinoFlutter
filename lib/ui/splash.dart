@@ -28,49 +28,64 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.all(20),
-            child: Image.asset("assets/images/technofino.png"),
-          ),
-          Text("TechnoFino Community",
-              style: GoogleFonts.anton(
-                  textStyle: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: TextDecoration.none,),textScaleFactor: 0.7
-          ),
-          SizedBox(height: 20,),
-          Text("#1 Banking & Credit Card ",
-              style: GoogleFonts.titanOne(
-                textStyle: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  fontSize: 38
-                ),
-                decoration: TextDecoration.none,
-              ),textScaleFactor: 0.7
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            alignment: Alignment.center,
-            child:    Text("Cumminity",
-                style: GoogleFonts.titanOne(
-                  textStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold
-                  ),
-                  decoration: TextDecoration.none,
-                ),textScaleFactor: 0.7
-            ),
-          )
-        ],
-      ),
+    return Scaffold(
+      // backgroundColor: Color(0xff7BD3D3D3),
+        body: Container(
+      color: Color(0xff7BD3D3D3),
+      child: Center(
+        child:   Text("TechnoFino",
+            style: GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 28
+              ),
+              decoration: TextDecoration.none,)
+        ),
+      )
+
+
+
+      // Column(
+      //   children: [
+      //     Container(
+      //       margin: EdgeInsets.all(20),
+      //       child: Image.asset("assets/images/technofino.png"),
+      //     ),
+      //     Text("TechnoFino Community",
+      //         style: GoogleFonts.anton(
+      //             textStyle: TextStyle(
+      //               color: Colors.black,
+      //               fontWeight: FontWeight.bold,
+      //             ),
+      //             decoration: TextDecoration.none,),textScaleFactor: 0.7
+      //     ),
+      //     SizedBox(height: 20,),
+      //     Text("#1 Banking & Credit Card ",
+      //         style: GoogleFonts.titanOne(
+      //           textStyle: TextStyle(
+      //               color: Colors.black,
+      //               fontWeight: FontWeight.bold,
+      //             fontSize: 38
+      //           ),
+      //           decoration: TextDecoration.none,
+      //         ),textScaleFactor: 0.7
+      //     ),
+      //     Container(
+      //       width: MediaQuery.of(context).size.width,
+      //       alignment: Alignment.center,
+      //       child:    Text("Cumminity",
+      //           style: GoogleFonts.titanOne(
+      //             textStyle: TextStyle(
+      //                 color: Colors.black,
+      //                 fontWeight: FontWeight.bold
+      //             ),
+      //             decoration: TextDecoration.none,
+      //           ),textScaleFactor: 0.7
+      //       ),
+      //     )
+      //   ],
+      // ),
     ));
   }
 }

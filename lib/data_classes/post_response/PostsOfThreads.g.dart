@@ -10,6 +10,9 @@ _$_PostsOfThreads _$$_PostsOfThreadsFromJson(Map<String, dynamic> json) =>
     _$_PostsOfThreads(
       message: json['message'] as String? ?? "",
       message_parsed: json['message_parsed'] as String? ?? "",
+      Thread: json['Thread'] == null
+          ? null
+          : Threads.fromJson(json['Thread'] as Map<String, dynamic>),
       position: json['position'] as int? ?? 0,
       message_date: (json['message_date'] as num?)?.toDouble() ?? 0,
       post_date: (json['post_date'] as num?)?.toDouble() ?? 0,
@@ -34,12 +37,15 @@ _$_PostsOfThreads _$$_PostsOfThreadsFromJson(Map<String, dynamic> json) =>
       Attachments: (json['Attachments'] as List<dynamic>?)
           ?.map((e) => AttachmentsData.fromJson(e as Map<String, dynamic>))
           .toList(),
+      view_url: json['view_url'] as String? ?? "",
+      message_state: json['message_state'] as String? ?? "",
     );
 
 Map<String, dynamic> _$$_PostsOfThreadsToJson(_$_PostsOfThreads instance) =>
     <String, dynamic>{
       'message': instance.message,
       'message_parsed': instance.message_parsed,
+      'Thread': instance.Thread,
       'position': instance.position,
       'message_date': instance.message_date,
       'post_date': instance.post_date,
@@ -58,4 +64,6 @@ Map<String, dynamic> _$$_PostsOfThreadsToJson(_$_PostsOfThreads instance) =>
       'is_admin': instance.is_admin,
       'is_super_admin': instance.is_super_admin,
       'Attachments': instance.Attachments,
+      'view_url': instance.view_url,
+      'message_state': instance.message_state,
     };

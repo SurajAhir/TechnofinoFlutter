@@ -9,6 +9,7 @@ class PostsOfThreadResponse with _$PostsOfThreadResponse {
   const factory PostsOfThreadResponse(
       {
         required List<PostsOfThreads> posts,
+        PostsOfThreads? pinned_post,
         Pagination? pagination}) = _PostsOfThreadResponse;
 
   factory PostsOfThreadResponse.fromJson(Map<String, dynamic> json) =>

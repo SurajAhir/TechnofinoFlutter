@@ -3,11 +3,15 @@ import 'dart:collection';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:technofino/data_classes/NodeResponse.dart';
-import 'package:technofino/data_classes/Nodes.dart';
+import 'package:get/get_utils/get_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:technofino/main_data_class/MyDataClass.dart';
 import 'package:technofino/services/ApiClient.dart';
 import 'package:technofino/ui/nodes_related_classes/ShowChildNodes.dart';
+
+import '../../data_classes/forume_data/NodeResponse.dart';
+import '../../data_classes/forume_data/Nodes.dart';
+import '../../provider/MyProvider.dart';
 
 class ShowNodes extends StatefulWidget {
   const ShowNodes({Key? key}) : super(key: key);
@@ -19,13 +23,15 @@ class ShowNodes extends StatefulWidget {
 class _ShowNodesState extends State<ShowNodes> {
   @override
   Widget build(BuildContext context) {
+    var provider=Provider.of<MyProvider>(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text(
           "Forums",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).bottomAppBarColor,
       ),
       body: Container(
         child: FutureBuilder(

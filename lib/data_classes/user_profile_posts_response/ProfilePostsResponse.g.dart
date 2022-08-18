@@ -10,7 +10,7 @@ _$_ProfilePostsResponse _$$_ProfilePostsResponseFromJson(
         Map<String, dynamic> json) =>
     _$_ProfilePostsResponse(
       profile_posts: (json['profile_posts'] as List<dynamic>)
-          .map((e) => PostsOfThreads.fromJson(e as Map<String, dynamic>))
+          .map((e) => ProfilePosts.fromJson(e as Map<String, dynamic>))
           .toList(),
       pagination: json['pagination'] == null
           ? null

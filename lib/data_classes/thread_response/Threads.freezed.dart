@@ -24,11 +24,13 @@ mixin _$Threads {
   String get title => throw _privateConstructorUsedError;
   int get reply_count => throw _privateConstructorUsedError;
   double get post_date => throw _privateConstructorUsedError;
+  int get last_post_id => throw _privateConstructorUsedError;
   UserData get User => throw _privateConstructorUsedError;
   int get thread_id => throw _privateConstructorUsedError;
   double get last_post_date => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   int get view_count => throw _privateConstructorUsedError;
+  String get view_url => throw _privateConstructorUsedError;
   ForumResponse? get Forum => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,11 +47,13 @@ abstract class $ThreadsCopyWith<$Res> {
       String title,
       int reply_count,
       double post_date,
+      int last_post_id,
       UserData User,
       int thread_id,
       double last_post_date,
       String username,
       int view_count,
+      String view_url,
       ForumResponse? Forum});
 
   $UserDataCopyWith<$Res> get User;
@@ -70,11 +74,13 @@ class _$ThreadsCopyWithImpl<$Res> implements $ThreadsCopyWith<$Res> {
     Object? title = freezed,
     Object? reply_count = freezed,
     Object? post_date = freezed,
+    Object? last_post_id = freezed,
     Object? User = freezed,
     Object? thread_id = freezed,
     Object? last_post_date = freezed,
     Object? username = freezed,
     Object? view_count = freezed,
+    Object? view_url = freezed,
     Object? Forum = freezed,
   }) {
     return _then(_value.copyWith(
@@ -94,6 +100,10 @@ class _$ThreadsCopyWithImpl<$Res> implements $ThreadsCopyWith<$Res> {
           ? _value.post_date
           : post_date // ignore: cast_nullable_to_non_nullable
               as double,
+      last_post_id: last_post_id == freezed
+          ? _value.last_post_id
+          : last_post_id // ignore: cast_nullable_to_non_nullable
+              as int,
       User: User == freezed
           ? _value.User
           : User // ignore: cast_nullable_to_non_nullable
@@ -114,6 +124,10 @@ class _$ThreadsCopyWithImpl<$Res> implements $ThreadsCopyWith<$Res> {
           ? _value.view_count
           : view_count // ignore: cast_nullable_to_non_nullable
               as int,
+      view_url: view_url == freezed
+          ? _value.view_url
+          : view_url // ignore: cast_nullable_to_non_nullable
+              as String,
       Forum: Forum == freezed
           ? _value.Forum
           : Forum // ignore: cast_nullable_to_non_nullable
@@ -151,11 +165,13 @@ abstract class _$$_ThreadsCopyWith<$Res> implements $ThreadsCopyWith<$Res> {
       String title,
       int reply_count,
       double post_date,
+      int last_post_id,
       UserData User,
       int thread_id,
       double last_post_date,
       String username,
       int view_count,
+      String view_url,
       ForumResponse? Forum});
 
   @override
@@ -179,11 +195,13 @@ class __$$_ThreadsCopyWithImpl<$Res> extends _$ThreadsCopyWithImpl<$Res>
     Object? title = freezed,
     Object? reply_count = freezed,
     Object? post_date = freezed,
+    Object? last_post_id = freezed,
     Object? User = freezed,
     Object? thread_id = freezed,
     Object? last_post_date = freezed,
     Object? username = freezed,
     Object? view_count = freezed,
+    Object? view_url = freezed,
     Object? Forum = freezed,
   }) {
     return _then(_$_Threads(
@@ -203,6 +221,10 @@ class __$$_ThreadsCopyWithImpl<$Res> extends _$ThreadsCopyWithImpl<$Res>
           ? _value.post_date
           : post_date // ignore: cast_nullable_to_non_nullable
               as double,
+      last_post_id: last_post_id == freezed
+          ? _value.last_post_id
+          : last_post_id // ignore: cast_nullable_to_non_nullable
+              as int,
       User: User == freezed
           ? _value.User
           : User // ignore: cast_nullable_to_non_nullable
@@ -223,6 +245,10 @@ class __$$_ThreadsCopyWithImpl<$Res> extends _$ThreadsCopyWithImpl<$Res>
           ? _value.view_count
           : view_count // ignore: cast_nullable_to_non_nullable
               as int,
+      view_url: view_url == freezed
+          ? _value.view_url
+          : view_url // ignore: cast_nullable_to_non_nullable
+              as String,
       Forum: Forum == freezed
           ? _value.Forum
           : Forum // ignore: cast_nullable_to_non_nullable
@@ -239,11 +265,13 @@ class _$_Threads implements _Threads {
       this.title = "",
       this.reply_count = 0,
       this.post_date = 0,
+      this.last_post_id = 0,
       required this.User,
       this.thread_id = 0,
       this.last_post_date = 0,
       this.username = "",
       this.view_count = 0,
+      this.view_url = "",
       this.Forum});
 
   factory _$_Threads.fromJson(Map<String, dynamic> json) =>
@@ -262,6 +290,9 @@ class _$_Threads implements _Threads {
   @JsonKey()
   final double post_date;
   @override
+  @JsonKey()
+  final int last_post_id;
+  @override
   final UserData User;
   @override
   @JsonKey()
@@ -276,11 +307,14 @@ class _$_Threads implements _Threads {
   @JsonKey()
   final int view_count;
   @override
+  @JsonKey()
+  final String view_url;
+  @override
   final ForumResponse? Forum;
 
   @override
   String toString() {
-    return 'Threads(last_post_username: $last_post_username, title: $title, reply_count: $reply_count, post_date: $post_date, User: $User, thread_id: $thread_id, last_post_date: $last_post_date, username: $username, view_count: $view_count, Forum: $Forum)';
+    return 'Threads(last_post_username: $last_post_username, title: $title, reply_count: $reply_count, post_date: $post_date, last_post_id: $last_post_id, User: $User, thread_id: $thread_id, last_post_date: $last_post_date, username: $username, view_count: $view_count, view_url: $view_url, Forum: $Forum)';
   }
 
   @override
@@ -294,6 +328,8 @@ class _$_Threads implements _Threads {
             const DeepCollectionEquality()
                 .equals(other.reply_count, reply_count) &&
             const DeepCollectionEquality().equals(other.post_date, post_date) &&
+            const DeepCollectionEquality()
+                .equals(other.last_post_id, last_post_id) &&
             const DeepCollectionEquality().equals(other.User, User) &&
             const DeepCollectionEquality().equals(other.thread_id, thread_id) &&
             const DeepCollectionEquality()
@@ -301,6 +337,7 @@ class _$_Threads implements _Threads {
             const DeepCollectionEquality().equals(other.username, username) &&
             const DeepCollectionEquality()
                 .equals(other.view_count, view_count) &&
+            const DeepCollectionEquality().equals(other.view_url, view_url) &&
             const DeepCollectionEquality().equals(other.Forum, Forum));
   }
 
@@ -312,11 +349,13 @@ class _$_Threads implements _Threads {
       const DeepCollectionEquality().hash(title),
       const DeepCollectionEquality().hash(reply_count),
       const DeepCollectionEquality().hash(post_date),
+      const DeepCollectionEquality().hash(last_post_id),
       const DeepCollectionEquality().hash(User),
       const DeepCollectionEquality().hash(thread_id),
       const DeepCollectionEquality().hash(last_post_date),
       const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(view_count),
+      const DeepCollectionEquality().hash(view_url),
       const DeepCollectionEquality().hash(Forum));
 
   @JsonKey(ignore: true)
@@ -336,11 +375,13 @@ abstract class _Threads implements Threads {
       final String title,
       final int reply_count,
       final double post_date,
+      final int last_post_id,
       required final UserData User,
       final int thread_id,
       final double last_post_date,
       final String username,
       final int view_count,
+      final String view_url,
       final ForumResponse? Forum}) = _$_Threads;
 
   factory _Threads.fromJson(Map<String, dynamic> json) = _$_Threads.fromJson;
@@ -354,6 +395,8 @@ abstract class _Threads implements Threads {
   @override
   double get post_date;
   @override
+  int get last_post_id;
+  @override
   UserData get User;
   @override
   int get thread_id;
@@ -363,6 +406,8 @@ abstract class _Threads implements Threads {
   String get username;
   @override
   int get view_count;
+  @override
+  String get view_url;
   @override
   ForumResponse? get Forum;
   @override

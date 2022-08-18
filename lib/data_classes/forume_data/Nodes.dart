@@ -1,7 +1,8 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'TypeData.dart';
+import '../login_response/TypeData.dart';
+
 part 'Nodes.g.dart';
 part 'Nodes.freezed.dart';
 @Freezed()

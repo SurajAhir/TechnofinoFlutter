@@ -50,6 +50,16 @@ dependencies:
   permission_handler: ^9.2.0
   image_cropper: ^2.0.3
   file_picker: ^4.6.1
+  badges: ^2.0.3
+  google_sign_in: ^5.4.0
+  url_launcher: ^6.1.5
+  webview_flutter: any
+  twitter_login: ^4.2.3
+  get: ^4.6.5
+  pull_to_refresh: ^2.0.0
+  connectivity_plus: ^2.3.6
+  flutter_slidable: ^2.0.0
+  share_plus: ^4.0.10+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -94,6 +104,12 @@ flutter:
     - assets/icons/sad_icon.png
     - assets/icons/wow_icon.png
     - assets/icons/love_icon.png
+    - assets/icons/options.png
+    - assets/icons/twitter.png
+    - assets/icons/alert_icon.png
+    - assets/icons/youtube_icon.png
+    - assets/icons/email.png
+    - assets/icons/toolbar.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -107,12 +123,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Schyler
+      fonts:
+        - asset: assets/fonts/Uchen-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

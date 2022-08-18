@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:technofino/ui/nodes_related_classes/ShowPostsOfThreads.dart';
 
 import '../../data_classes/notification_response/NotificationsData.dart';
@@ -20,6 +22,7 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
+  RefreshController _refreshController =RefreshController(initialRefresh: false);
   final _scrollControllar = ScrollController();
   List<NotificationsData> list = [];
   var isLoadingThreads = false;
@@ -57,14 +60,16 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
+    var provider=Provider.of<MyProvider>(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           title: Text(
-            "Notifications",
+            "notifications".tr,
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
+                fontWeight: FontWeight.bold, color:Theme.of(context).accentColor , fontSize: 18),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).bottomAppBarColor,
         ),
         body: MyDataClass.isUserLoggedIn?Container(
           height: MediaQuery
@@ -75,6 +80,7 @@ class _NotificationsState extends State<Notifications> {
               .of(context)
               .size
               .width,
+          color: Theme.of(context).backgroundColor,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,75 +91,106 @@ class _NotificationsState extends State<Notifications> {
                 isFirstLoadingConversations == false
                     ? Expanded(
                   child: Scaffold(
-                    body: ListView.builder(
-                      controller: _scrollControllar,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: ListTile(
-                            leading: list[index]
-                                .User!
-                                .avatar_urls
-                                .o
-                                .toString()
-                                .isNotEmpty
-                                ? InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UserProfile(list[index]
-                                                .User!)));
-                              },
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    list[index]
-                                        .User!
-                                        .avatar_urls
-                                        .o),
-                              ),
-                            )
-                                : InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UserProfile(list[index]
-                                                .User!)));
-                              },
-                              child: CircleAvatar(
-                                child: Text(
-                                    "${list[index].User!.username.substring(
-                                        0, 1)}"),
-                              ),
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    body: SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: false,
+                        controller: _refreshController,
+                        onRefresh: () async{
+                          debugPrint("refrshing...");
+                          page=1;
+                          getData(page);
+                        },
+                      child: ListView.builder(
+                        controller: _scrollControllar,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            color: Theme.of(context).bottomAppBarColor,
+                            padding: EdgeInsets.only(left: 5,right: 5,top: 3),
+                            child: ListTile(
+                                leading: list[index].User!=null?list[index]
+                                    .User!
+                                    .avatar_urls
+                                    .o
+                                    .toString()
+                                    .isNotEmpty
+                                    ? InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserProfile(list[index]
+                                                    .User!)));
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        list[index]
+                                            .User!
+                                            .avatar_urls
+                                            .o),
+                                  ),
+                                )
+                                    : InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserProfile(list[index]
+                                                    .User!)));
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.blueAccent,
+                                    child: Text(
+                                      "${list[index].User!.username.substring(
+                                          0, 1)}",style: TextStyle(color: Colors.white),),
+                                  ),
+                                ):InkWell(
+                                  onTap: () {
+                                    if(list[index].User!=null){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserProfile(list[index]
+                                                      .User!)));
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.blueAccent,
+                                    child: Text(
+                                      "?",style: TextStyle(color: Colors.white),),
+                                  ),
+                                ),
+                                title: InkWell(
+                                    onTap: () {
+                                      getPostFromAlerts(
+                                          context, list[index].content_id);
+                                      markRead(list[index].alert_id, true);
+                                    },
+                                    child: Text(list[index].alert_text,
+                                      style: TextStyle(fontSize: 14),)),
+                                subtitle: Text(
+                                  "${DateFormat('MM/dd/yyyy').format(
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          ((list[index].event_date) * 1000)
+                                              .toInt()))}",
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                trailing: list[index].read_date>0?SizedBox(): CircleAvatar(backgroundColor: provider.darkTheme?Colors.white:Colors.black38,radius: 4,)
                             ),
-                            title: InkWell(
-                                onTap: () {
-                                  getPostFromAlerts(
-                                      context, list[index].content_id);
-                                },
-                                child: Text(list[index].alert_text,
-                                  style: TextStyle(fontSize: 14),)),
-                            subtitle: Text(
-                              "${DateFormat('MM/dd/yyyy').format(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      ((list[index].event_date) * 1000)
-                                          .toInt()))}",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: list.length,
+                          );
+                        },
+                        itemCount: list.length,
+                      ),
                     ),
                   ),
                 )
                     : isDataAvailbale == false
                     ? const Center(child: CircularProgressIndicator())
-                    : const Center(
-                  child: Text("No alerts found!"),
+                    : Center(
+                  child: Text("no_alerts_found".tr),
                 ),
                 if (Provider
                     .of<MyProvider>(context)
@@ -162,7 +199,8 @@ class _NotificationsState extends State<Notifications> {
               ],
             ),
           ),
-        ):Container(
+        )
+            :Container(
           height: MediaQuery
               .of(context)
               .size
@@ -176,8 +214,8 @@ class _NotificationsState extends State<Notifications> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "You must log-in to perform this action.",
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  "you_must_log_in_to_perform_this_action".tr,
+                  style: TextStyle(fontSize: 16, color: Theme.of(context).accentColor),
                 ),
                 SizedBox(
                   height: 5,
@@ -187,7 +225,7 @@ class _NotificationsState extends State<Notifications> {
                       Navigator.pushNamed(context, "/login");
                     },
                     child: Text(
-                      "Log in",
+                      "log_in".tr,
                       style: TextStyle(color: Colors.white),
                     )),
               ],
@@ -248,8 +286,14 @@ class _NotificationsState extends State<Notifications> {
     var alertsResponse =
     await ApiClient(Dio(BaseOptions(contentType: "application/json")))
         .getAlerts(
-        MyDataClass.api_key, "625", page, "desc", "last_post_date");
+        MyDataClass.api_key, MyDataClass.myUserId, page, "desc", "last_post_date");
     pagination = alertsResponse.pagination;
+    if(_refreshController.isRefresh){
+      if(alertsResponse.alerts.isNotEmpty){
+        list.clear();
+      }
+      _refreshController.refreshCompleted();
+    }
     list.addAll(alertsResponse.alerts);
     if (list.isEmpty) {
       isDataAvailbale = true;
@@ -264,23 +308,47 @@ class _NotificationsState extends State<Notifications> {
   void getPostFromAlerts(BuildContext context, int content_id) async {
     var alertsResponse = await ApiClient(
         Dio(BaseOptions(contentType: "application/json"))).getPostOfAlerts(
-        MyDataClass.api_key, "625", content_id);
+        MyDataClass.api_key, MyDataClass.myUserId, content_id);
     var thread = alertsResponse.post.Thread;
     int position = alertsResponse.post.position;
     debugPrint(position.toString());
 
-    if (position < 10) {
+    if (position < 20) {
       int page = 1;
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>
-          ShowPostsOfThreads(thread.Forum!.breadcrumbs![0].title,
-              thread.Forum!.breadcrumbs![1].title, thread, page,
-              thread.Forum!.title)));
-    } else {
-      int page = (position ~/ 10) + 1;
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>
-          ShowPostsOfThreads(thread.Forum!.breadcrumbs![0].title,
-              thread.Forum!.breadcrumbs![1].title, thread, page,
-              thread.Forum!.title)));
+     if(thread.Forum!.breadcrumbs!.length>1){
+       Navigator.push(context, MaterialPageRoute(builder: (context) =>
+           ShowPostsOfThreads(thread.Forum!.breadcrumbs![0].title,
+               thread.Forum!.breadcrumbs![1].title, thread, page,
+               thread.Forum!.title)));
+     }else{
+       Navigator.push(context, MaterialPageRoute(builder: (context) =>
+           ShowPostsOfThreads(thread.Forum!.breadcrumbs![0].title,
+               "", thread, page,
+               thread.Forum!.title)));
+     }
     }
+    else {
+      int page = (position ~/ 20) + 1;
+      if(thread.Forum!.breadcrumbs!.length>1){
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>
+            ShowPostsOfThreads(thread.Forum!.breadcrumbs![0].title,
+                thread.Forum!.breadcrumbs![1].title, thread, page,
+                thread.Forum!.title)));
+      }else{
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>
+            ShowPostsOfThreads(thread.Forum!.breadcrumbs![0].title,
+                "", thread, page,
+                thread.Forum!.title)));
+      }
+    }
+  }
+
+  void markRead(int conversation_id,bool val) async {
+    var conversationResponse =
+    await ApiClient(Dio(BaseOptions(contentType: "application/json")))
+        .markReadAlerts(
+        MyDataClass.api_key, MyDataClass.myUserId, conversation_id,val);
+    setState(() {
+    });
   }
 }

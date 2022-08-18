@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../Threads.dart';
+import 'Threads.dart';
 import '../pagination/Pagination.dart';
 
 part 'ThreadResponse.freezed.dart';

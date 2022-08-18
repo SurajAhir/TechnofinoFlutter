@@ -22,6 +22,7 @@ ForumResponse _$ForumResponseFromJson(Map<String, dynamic> json) {
 mixin _$ForumResponse {
   List<ForumData>? get breadcrumbs => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,7 @@ abstract class $ForumResponseCopyWith<$Res> {
   factory $ForumResponseCopyWith(
           ForumResponse value, $Res Function(ForumResponse) then) =
       _$ForumResponseCopyWithImpl<$Res>;
-  $Res call({List<ForumData>? breadcrumbs, String title});
+  $Res call({List<ForumData>? breadcrumbs, String title, String description});
 }
 
 /// @nodoc
@@ -50,6 +51,7 @@ class _$ForumResponseCopyWithImpl<$Res>
   $Res call({
     Object? breadcrumbs = freezed,
     Object? title = freezed,
+    Object? description = freezed,
   }) {
     return _then(_value.copyWith(
       breadcrumbs: breadcrumbs == freezed
@@ -59,6 +61,10 @@ class _$ForumResponseCopyWithImpl<$Res>
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: description == freezed
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -71,7 +77,7 @@ abstract class _$$_ForumResponseCopyWith<$Res>
           _$_ForumResponse value, $Res Function(_$_ForumResponse) then) =
       __$$_ForumResponseCopyWithImpl<$Res>;
   @override
-  $Res call({List<ForumData>? breadcrumbs, String title});
+  $Res call({List<ForumData>? breadcrumbs, String title, String description});
 }
 
 /// @nodoc
@@ -89,6 +95,7 @@ class __$$_ForumResponseCopyWithImpl<$Res>
   $Res call({
     Object? breadcrumbs = freezed,
     Object? title = freezed,
+    Object? description = freezed,
   }) {
     return _then(_$_ForumResponse(
       breadcrumbs: breadcrumbs == freezed
@@ -99,6 +106,10 @@ class __$$_ForumResponseCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
+      description: description == freezed
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -106,7 +117,10 @@ class __$$_ForumResponseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ForumResponse implements _ForumResponse {
-  const _$_ForumResponse({final List<ForumData>? breadcrumbs, this.title = ""})
+  const _$_ForumResponse(
+      {final List<ForumData>? breadcrumbs,
+      this.title = "",
+      this.description = ""})
       : _breadcrumbs = breadcrumbs;
 
   factory _$_ForumResponse.fromJson(Map<String, dynamic> json) =>
@@ -124,10 +138,13 @@ class _$_ForumResponse implements _ForumResponse {
   @override
   @JsonKey()
   final String title;
+  @override
+  @JsonKey()
+  final String description;
 
   @override
   String toString() {
-    return 'ForumResponse(breadcrumbs: $breadcrumbs, title: $title)';
+    return 'ForumResponse(breadcrumbs: $breadcrumbs, title: $title, description: $description)';
   }
 
   @override
@@ -137,7 +154,9 @@ class _$_ForumResponse implements _ForumResponse {
             other is _$_ForumResponse &&
             const DeepCollectionEquality()
                 .equals(other._breadcrumbs, _breadcrumbs) &&
-            const DeepCollectionEquality().equals(other.title, title));
+            const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality()
+                .equals(other.description, description));
   }
 
   @JsonKey(ignore: true)
@@ -145,7 +164,8 @@ class _$_ForumResponse implements _ForumResponse {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_breadcrumbs),
-      const DeepCollectionEquality().hash(title));
+      const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(description));
 
   @JsonKey(ignore: true)
   @override
@@ -161,7 +181,8 @@ class _$_ForumResponse implements _ForumResponse {
 abstract class _ForumResponse implements ForumResponse {
   const factory _ForumResponse(
       {final List<ForumData>? breadcrumbs,
-      final String title}) = _$_ForumResponse;
+      final String title,
+      final String description}) = _$_ForumResponse;
 
   factory _ForumResponse.fromJson(Map<String, dynamic> json) =
       _$_ForumResponse.fromJson;
@@ -170,6 +191,8 @@ abstract class _ForumResponse implements ForumResponse {
   List<ForumData>? get breadcrumbs;
   @override
   String get title;
+  @override
+  String get description;
   @override
   @JsonKey(ignore: true)
   _$$_ForumResponseCopyWith<_$_ForumResponse> get copyWith =>

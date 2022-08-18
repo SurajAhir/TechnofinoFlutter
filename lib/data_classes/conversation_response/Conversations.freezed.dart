@@ -32,6 +32,8 @@ mixin _$Conversations {
   String get title => throw _privateConstructorUsedError;
   int get user_id => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
+  String get view_url => throw _privateConstructorUsedError;
+  bool get is_starred => throw _privateConstructorUsedError;
   bool get is_unread => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -58,6 +60,8 @@ abstract class $ConversationsCopyWith<$Res> {
       String title,
       int user_id,
       String username,
+      String view_url,
+      bool is_starred,
       bool is_unread});
 
   $UserDataCopyWith<$Res>? get Starter;
@@ -86,6 +90,8 @@ class _$ConversationsCopyWithImpl<$Res>
     Object? title = freezed,
     Object? user_id = freezed,
     Object? username = freezed,
+    Object? view_url = freezed,
+    Object? is_starred = freezed,
     Object? is_unread = freezed,
   }) {
     return _then(_value.copyWith(
@@ -137,6 +143,14 @@ class _$ConversationsCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
+      view_url: view_url == freezed
+          ? _value.view_url
+          : view_url // ignore: cast_nullable_to_non_nullable
+              as String,
+      is_starred: is_starred == freezed
+          ? _value.is_starred
+          : is_starred // ignore: cast_nullable_to_non_nullable
+              as bool,
       is_unread: is_unread == freezed
           ? _value.is_unread
           : is_unread // ignore: cast_nullable_to_non_nullable
@@ -176,6 +190,8 @@ abstract class _$$_ConversationsCopyWith<$Res>
       String title,
       int user_id,
       String username,
+      String view_url,
+      bool is_starred,
       bool is_unread});
 
   @override
@@ -207,6 +223,8 @@ class __$$_ConversationsCopyWithImpl<$Res>
     Object? title = freezed,
     Object? user_id = freezed,
     Object? username = freezed,
+    Object? view_url = freezed,
+    Object? is_starred = freezed,
     Object? is_unread = freezed,
   }) {
     return _then(_$_Conversations(
@@ -258,6 +276,14 @@ class __$$_ConversationsCopyWithImpl<$Res>
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
               as String,
+      view_url: view_url == freezed
+          ? _value.view_url
+          : view_url // ignore: cast_nullable_to_non_nullable
+              as String,
+      is_starred: is_starred == freezed
+          ? _value.is_starred
+          : is_starred // ignore: cast_nullable_to_non_nullable
+              as bool,
       is_unread: is_unread == freezed
           ? _value.is_unread
           : is_unread // ignore: cast_nullable_to_non_nullable
@@ -282,6 +308,8 @@ class _$_Conversations implements _Conversations {
       this.title = "",
       this.user_id = 0,
       this.username = "",
+      this.view_url = "",
+      this.is_starred = false,
       this.is_unread = false});
 
   factory _$_Conversations.fromJson(Map<String, dynamic> json) =>
@@ -324,11 +352,17 @@ class _$_Conversations implements _Conversations {
   final String username;
   @override
   @JsonKey()
+  final String view_url;
+  @override
+  @JsonKey()
+  final bool is_starred;
+  @override
+  @JsonKey()
   final bool is_unread;
 
   @override
   String toString() {
-    return 'Conversations(conversation_id: $conversation_id, first_message_id: $first_message_id, last_message_date: $last_message_date, last_message_id: $last_message_id, last_message_user_id: $last_message_user_id, recipient_count: $recipient_count, start_date: $start_date, reply_count: $reply_count, Starter: $Starter, title: $title, user_id: $user_id, username: $username, is_unread: $is_unread)';
+    return 'Conversations(conversation_id: $conversation_id, first_message_id: $first_message_id, last_message_date: $last_message_date, last_message_id: $last_message_id, last_message_user_id: $last_message_user_id, recipient_count: $recipient_count, start_date: $start_date, reply_count: $reply_count, Starter: $Starter, title: $title, user_id: $user_id, username: $username, view_url: $view_url, is_starred: $is_starred, is_unread: $is_unread)';
   }
 
   @override
@@ -356,6 +390,9 @@ class _$_Conversations implements _Conversations {
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality().equals(other.user_id, user_id) &&
             const DeepCollectionEquality().equals(other.username, username) &&
+            const DeepCollectionEquality().equals(other.view_url, view_url) &&
+            const DeepCollectionEquality()
+                .equals(other.is_starred, is_starred) &&
             const DeepCollectionEquality().equals(other.is_unread, is_unread));
   }
 
@@ -375,6 +412,8 @@ class _$_Conversations implements _Conversations {
       const DeepCollectionEquality().hash(title),
       const DeepCollectionEquality().hash(user_id),
       const DeepCollectionEquality().hash(username),
+      const DeepCollectionEquality().hash(view_url),
+      const DeepCollectionEquality().hash(is_starred),
       const DeepCollectionEquality().hash(is_unread));
 
   @JsonKey(ignore: true)
@@ -402,6 +441,8 @@ abstract class _Conversations implements Conversations {
       final String title,
       final int user_id,
       final String username,
+      final String view_url,
+      final bool is_starred,
       final bool is_unread}) = _$_Conversations;
 
   factory _Conversations.fromJson(Map<String, dynamic> json) =
@@ -431,6 +472,10 @@ abstract class _Conversations implements Conversations {
   int get user_id;
   @override
   String get username;
+  @override
+  String get view_url;
+  @override
+  bool get is_starred;
   @override
   bool get is_unread;
   @override

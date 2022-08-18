@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:http/http.dart' as http;
 
+import '../../main_data_class/MyDataClass.dart';
+
 class ShowImage extends StatefulWidget {
   int attachment_id;
 
@@ -43,7 +45,7 @@ class _ShowImageState extends State<ShowImage> {
             "https://technofino.in/community/api/attachments/${widget.attachment_id}/data"),
         headers: {
           "XF-Api-Key": "p-rQmDsW41tBC768faylyvJcd8KOnp3g",
-          "XF-Api-User": "625"
+          "XF-Api-User": MyDataClass.myUserId.toString()
         });
     image = response.bodyBytes;
     setState(() {});

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:technofino/data_classes/UserData.dart';
+
+import '../login_response/UserData.dart';
 part 'NotificationsData.g.dart';
 
 part 'NotificationsData.freezed.dart';

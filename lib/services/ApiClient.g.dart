@@ -105,6 +105,25 @@ class _ApiClient implements ApiClient {
   }
 
   @override
+  Future<Map<String, PostsOfThreads>> getPostsOfLastPostId(
+      api_key, last_post_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'XF-Api-Key': api_key};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, PostsOfThreads>>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, 'posts/${last_post_id}/',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!.map((k, dynamic v) =>
+        MapEntry(k, PostsOfThreads.fromJson(v as Map<String, dynamic>)));
+    return value;
+  }
+
+  @override
   Future<ThreadResponse> getHomeThreads(api_key, page, direction, order) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -197,6 +216,27 @@ class _ApiClient implements ApiClient {
   }
 
   @override
+  Future<ConversationResponse> getUnViewedConversations(
+      api_key, user_id, unread) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'unread': unread};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ConversationResponse>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, 'conversations/',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ConversationResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<ConversationMessages> getConversationMessages(
       key, userId, conversation_id, page) async {
     const _extra = <String, dynamic>{};
@@ -244,6 +284,27 @@ class _ApiClient implements ApiClient {
   }
 
   @override
+  Future<NotificationResponse> getUnViewedAlerts(
+      api_key, user_id, unread) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'unread': unread};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<NotificationResponse>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, 'alerts/',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = NotificationResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<PostFromNotification> getPostOfAlerts(
       api_key, user_id, content_id) async {
     const _extra = <String, dynamic>{};
@@ -266,7 +327,7 @@ class _ApiClient implements ApiClient {
 
   @override
   Future<Map<String, bool>> postThread(
-      api_key, user_id, node_id, title, message) async {
+      api_key, user_id, node_id, title, message, attachment_key) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{
@@ -274,7 +335,12 @@ class _ApiClient implements ApiClient {
       r'XF-Api-User': user_id
     };
     _headers.removeWhere((k, v) => v == null);
-    final _data = {'node_id': node_id, 'title': title, 'message': message};
+    final _data = {
+      'node_id': node_id,
+      'title': title,
+      'message': message,
+      'attachment_key': attachment_key
+    };
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<Map<String, bool>>(Options(
                 method: 'POST',
@@ -330,6 +396,540 @@ class _ApiClient implements ApiClient {
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = ReactData.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<Map<String, String>> generateAttachmentKeyForReplyConversation(
+      api_key, user_id, message_id, type) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'context[conversation_id]': message_id, 'type': type};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, String>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'attachments/new-key',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, String>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, AttachmentsData>> postAttachmentFile(
+      api_key, user_id, file, attachmentKey) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = FormData();
+    _data.files.add(MapEntry(
+        'attachment',
+        MultipartFile.fromFileSync(file.path,
+            filename: file.path.split(Platform.pathSeparator).last)));
+    _data.fields.add(MapEntry('key', attachmentKey));
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, AttachmentsData>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'multipart/form-data')
+            .compose(_dio.options, 'attachments/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!.map((k, dynamic v) =>
+        MapEntry(k, AttachmentsData.fromJson(v as Map<String, dynamic>)));
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> postConversationReply(
+      api_key, user_id, conversation_id, message, attachment_key) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {
+      'conversation_id': conversation_id,
+      'message': message,
+      'attachment_key': attachment_key
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'conversation-messages/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, String>> generateAttachmentKeyForPostsOfThreads(
+      api_key, user_id, thread_id, type) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'context[thread_id]': thread_id, 'type': type};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, String>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'attachments/new-key',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, String>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> getResponseOfPostsOfThreadsComments(
+      api_key, user_id, thread_id, message, attachment_key) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {
+      'thread_id': thread_id,
+      'message': message,
+      'attachment_key': attachment_key
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'posts/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, String>> generateAttachmentKeyForUserProfile(
+      api_key, user_id, profile_user_id, type) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'context[profile_user_id]': profile_user_id, 'type': type};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, String>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'attachments/new-key',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, String>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> getResponseOfProfilePostsOfUpdateStatus(
+      api_key, user_id, profile_user_id, message, attachment_key) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {
+      'user_id': profile_user_id,
+      'message': message,
+      'attachment_key': attachment_key
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'profile-posts/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<ReactData> getResponseOfProfilePostsReact(
+      api_key, user_id, post_id, reaction_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'reaction_id': reaction_id};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ReactData>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'profile-posts/${post_id}/react',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ReactData.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ReactData> getResponseOfProfilePostsOfCommentsReact(
+      api_key, user_id, profile_comment_id, reaction_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'reaction_id': reaction_id};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ReactData>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options,
+                'profile-post-comments/${profile_comment_id}/react',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ReactData.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> markReadConversation(
+      api_key, user_id, conversation_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(
+                    _dio.options, 'conversations/${conversation_id}/mark-read',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> markReadAlerts(
+      api_key, user_id, conversation_id, read) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'read': read};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'alerts/${conversation_id}/mark',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<LoginResponse> updateUserProfileImage(api_key, user_id, file) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = FormData();
+    _data.files.add(MapEntry(
+        'avatar',
+        MultipartFile.fromFileSync(file.path,
+            filename: file.path.split(Platform.pathSeparator).last)));
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<LoginResponse>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'multipart/form-data')
+            .compose(_dio.options, 'me/avatar',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = LoginResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FilterData> findUserByName(api_key, username) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'username': username};
+    final _headers = <String, dynamic>{r'XF-Api-Key': api_key};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<FilterData>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, 'users/find-name',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = FilterData.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ThreadResponse> getForumsResponseByFilter(
+      api_key, node_id, direction, order, starter_id, last_days) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'direction': direction,
+      r'order': order,
+      r'starter_id': starter_id,
+      r'last_days': last_days
+    };
+    final _headers = <String, dynamic>{r'XF-Api-Key': api_key};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ThreadResponse>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, 'forums/${node_id}/threads/',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ThreadResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> getResponseOfUserProfilePostsOfComments(
+      api_key, user_id, profile_post_id, message, attachment_key) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {
+      'profile_post_id': profile_post_id,
+      'message': message,
+      'attachment_key': attachment_key
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'profile-post-comments/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> generateAttachmentKeyForUserProfilePostsOfComments(
+      api_key, user_id, profile_post_id, type) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'context[profile_post_id]': profile_post_id, 'type': type};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'attachments/new-key',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> deleteConversation(
+      api_key, user_id, conversation_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'DELETE',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'conversations/${conversation_id}/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> starConversation(
+      api_key, user_id, conversation_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'conversations/${conversation_id}/star',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, String>> generateAttachmentKeyForPostOfThread(
+      api_key, user_id, node_id, type) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'context[node_id]': node_id, 'type': type};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, String>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'attachments/new-key',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, String>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, String>> generateAttachmentKeyForStartConversation(
+      api_key, user_id, type) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'type': type};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, String>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'attachments/new-key',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, String>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> startNewConversation(
+      api_key,
+      user_id,
+      recipient_ids,
+      title,
+      message,
+      attachment_key,
+      conversation_open,
+      open_invite) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {
+      'recipient_ids[]': recipient_ids,
+      'title': title,
+      'message': message,
+      'attachment_key': attachment_key,
+      'conversation_open': conversation_open,
+      'open_invite': open_invite
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'conversations/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
     return value;
   }
 

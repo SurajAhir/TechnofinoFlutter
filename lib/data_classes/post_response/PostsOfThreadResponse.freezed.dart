@@ -22,6 +22,7 @@ PostsOfThreadResponse _$PostsOfThreadResponseFromJson(
 /// @nodoc
 mixin _$PostsOfThreadResponse {
   List<PostsOfThreads> get posts => throw _privateConstructorUsedError;
+  PostsOfThreads? get pinned_post => throw _privateConstructorUsedError;
   Pagination? get pagination => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,8 +36,12 @@ abstract class $PostsOfThreadResponseCopyWith<$Res> {
   factory $PostsOfThreadResponseCopyWith(PostsOfThreadResponse value,
           $Res Function(PostsOfThreadResponse) then) =
       _$PostsOfThreadResponseCopyWithImpl<$Res>;
-  $Res call({List<PostsOfThreads> posts, Pagination? pagination});
+  $Res call(
+      {List<PostsOfThreads> posts,
+      PostsOfThreads? pinned_post,
+      Pagination? pagination});
 
+  $PostsOfThreadsCopyWith<$Res>? get pinned_post;
   $PaginationCopyWith<$Res>? get pagination;
 }
 
@@ -52,6 +57,7 @@ class _$PostsOfThreadResponseCopyWithImpl<$Res>
   @override
   $Res call({
     Object? posts = freezed,
+    Object? pinned_post = freezed,
     Object? pagination = freezed,
   }) {
     return _then(_value.copyWith(
@@ -59,11 +65,26 @@ class _$PostsOfThreadResponseCopyWithImpl<$Res>
           ? _value.posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<PostsOfThreads>,
+      pinned_post: pinned_post == freezed
+          ? _value.pinned_post
+          : pinned_post // ignore: cast_nullable_to_non_nullable
+              as PostsOfThreads?,
       pagination: pagination == freezed
           ? _value.pagination
           : pagination // ignore: cast_nullable_to_non_nullable
               as Pagination?,
     ));
+  }
+
+  @override
+  $PostsOfThreadsCopyWith<$Res>? get pinned_post {
+    if (_value.pinned_post == null) {
+      return null;
+    }
+
+    return $PostsOfThreadsCopyWith<$Res>(_value.pinned_post!, (value) {
+      return _then(_value.copyWith(pinned_post: value));
+    });
   }
 
   @override
@@ -85,8 +106,13 @@ abstract class _$$_PostsOfThreadResponseCopyWith<$Res>
           $Res Function(_$_PostsOfThreadResponse) then) =
       __$$_PostsOfThreadResponseCopyWithImpl<$Res>;
   @override
-  $Res call({List<PostsOfThreads> posts, Pagination? pagination});
+  $Res call(
+      {List<PostsOfThreads> posts,
+      PostsOfThreads? pinned_post,
+      Pagination? pagination});
 
+  @override
+  $PostsOfThreadsCopyWith<$Res>? get pinned_post;
   @override
   $PaginationCopyWith<$Res>? get pagination;
 }
@@ -106,6 +132,7 @@ class __$$_PostsOfThreadResponseCopyWithImpl<$Res>
   @override
   $Res call({
     Object? posts = freezed,
+    Object? pinned_post = freezed,
     Object? pagination = freezed,
   }) {
     return _then(_$_PostsOfThreadResponse(
@@ -113,6 +140,10 @@ class __$$_PostsOfThreadResponseCopyWithImpl<$Res>
           ? _value._posts
           : posts // ignore: cast_nullable_to_non_nullable
               as List<PostsOfThreads>,
+      pinned_post: pinned_post == freezed
+          ? _value.pinned_post
+          : pinned_post // ignore: cast_nullable_to_non_nullable
+              as PostsOfThreads?,
       pagination: pagination == freezed
           ? _value.pagination
           : pagination // ignore: cast_nullable_to_non_nullable
@@ -125,7 +156,9 @@ class __$$_PostsOfThreadResponseCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_PostsOfThreadResponse implements _PostsOfThreadResponse {
   const _$_PostsOfThreadResponse(
-      {required final List<PostsOfThreads> posts, this.pagination})
+      {required final List<PostsOfThreads> posts,
+      this.pinned_post,
+      this.pagination})
       : _posts = posts;
 
   factory _$_PostsOfThreadResponse.fromJson(Map<String, dynamic> json) =>
@@ -139,11 +172,13 @@ class _$_PostsOfThreadResponse implements _PostsOfThreadResponse {
   }
 
   @override
+  final PostsOfThreads? pinned_post;
+  @override
   final Pagination? pagination;
 
   @override
   String toString() {
-    return 'PostsOfThreadResponse(posts: $posts, pagination: $pagination)';
+    return 'PostsOfThreadResponse(posts: $posts, pinned_post: $pinned_post, pagination: $pagination)';
   }
 
   @override
@@ -153,6 +188,8 @@ class _$_PostsOfThreadResponse implements _PostsOfThreadResponse {
             other is _$_PostsOfThreadResponse &&
             const DeepCollectionEquality().equals(other._posts, _posts) &&
             const DeepCollectionEquality()
+                .equals(other.pinned_post, pinned_post) &&
+            const DeepCollectionEquality()
                 .equals(other.pagination, pagination));
   }
 
@@ -161,6 +198,7 @@ class _$_PostsOfThreadResponse implements _PostsOfThreadResponse {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_posts),
+      const DeepCollectionEquality().hash(pinned_post),
       const DeepCollectionEquality().hash(pagination));
 
   @JsonKey(ignore: true)
@@ -178,6 +216,7 @@ class _$_PostsOfThreadResponse implements _PostsOfThreadResponse {
 abstract class _PostsOfThreadResponse implements PostsOfThreadResponse {
   const factory _PostsOfThreadResponse(
       {required final List<PostsOfThreads> posts,
+      final PostsOfThreads? pinned_post,
       final Pagination? pagination}) = _$_PostsOfThreadResponse;
 
   factory _PostsOfThreadResponse.fromJson(Map<String, dynamic> json) =
@@ -185,6 +224,8 @@ abstract class _PostsOfThreadResponse implements PostsOfThreadResponse {
 
   @override
   List<PostsOfThreads> get posts;
+  @override
+  PostsOfThreads? get pinned_post;
   @override
   Pagination? get pagination;
   @override

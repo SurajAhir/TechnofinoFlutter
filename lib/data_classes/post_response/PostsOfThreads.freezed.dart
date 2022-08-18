@@ -22,6 +22,7 @@ PostsOfThreads _$PostsOfThreadsFromJson(Map<String, dynamic> json) {
 mixin _$PostsOfThreads {
   String get message => throw _privateConstructorUsedError;
   String get message_parsed => throw _privateConstructorUsedError;
+  Threads? get Thread => throw _privateConstructorUsedError;
   int get position => throw _privateConstructorUsedError;
   double get message_date => throw _privateConstructorUsedError;
   double get post_date => throw _privateConstructorUsedError;
@@ -40,6 +41,8 @@ mixin _$PostsOfThreads {
   bool get is_admin => throw _privateConstructorUsedError;
   bool get is_super_admin => throw _privateConstructorUsedError;
   List<AttachmentsData>? get Attachments => throw _privateConstructorUsedError;
+  String get view_url => throw _privateConstructorUsedError;
+  String get message_state => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,6 +58,7 @@ abstract class $PostsOfThreadsCopyWith<$Res> {
   $Res call(
       {String message,
       String message_parsed,
+      Threads? Thread,
       int position,
       double message_date,
       double post_date,
@@ -72,8 +76,11 @@ abstract class $PostsOfThreadsCopyWith<$Res> {
       bool is_staff,
       bool is_admin,
       bool is_super_admin,
-      List<AttachmentsData>? Attachments});
+      List<AttachmentsData>? Attachments,
+      String view_url,
+      String message_state});
 
+  $ThreadsCopyWith<$Res>? get Thread;
   $UserDataCopyWith<$Res>? get User;
 }
 
@@ -90,6 +97,7 @@ class _$PostsOfThreadsCopyWithImpl<$Res>
   $Res call({
     Object? message = freezed,
     Object? message_parsed = freezed,
+    Object? Thread = freezed,
     Object? position = freezed,
     Object? message_date = freezed,
     Object? post_date = freezed,
@@ -108,6 +116,8 @@ class _$PostsOfThreadsCopyWithImpl<$Res>
     Object? is_admin = freezed,
     Object? is_super_admin = freezed,
     Object? Attachments = freezed,
+    Object? view_url = freezed,
+    Object? message_state = freezed,
   }) {
     return _then(_value.copyWith(
       message: message == freezed
@@ -118,6 +128,10 @@ class _$PostsOfThreadsCopyWithImpl<$Res>
           ? _value.message_parsed
           : message_parsed // ignore: cast_nullable_to_non_nullable
               as String,
+      Thread: Thread == freezed
+          ? _value.Thread
+          : Thread // ignore: cast_nullable_to_non_nullable
+              as Threads?,
       position: position == freezed
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -190,7 +204,26 @@ class _$PostsOfThreadsCopyWithImpl<$Res>
           ? _value.Attachments
           : Attachments // ignore: cast_nullable_to_non_nullable
               as List<AttachmentsData>?,
+      view_url: view_url == freezed
+          ? _value.view_url
+          : view_url // ignore: cast_nullable_to_non_nullable
+              as String,
+      message_state: message_state == freezed
+          ? _value.message_state
+          : message_state // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
+  }
+
+  @override
+  $ThreadsCopyWith<$Res>? get Thread {
+    if (_value.Thread == null) {
+      return null;
+    }
+
+    return $ThreadsCopyWith<$Res>(_value.Thread!, (value) {
+      return _then(_value.copyWith(Thread: value));
+    });
   }
 
   @override
@@ -215,6 +248,7 @@ abstract class _$$_PostsOfThreadsCopyWith<$Res>
   $Res call(
       {String message,
       String message_parsed,
+      Threads? Thread,
       int position,
       double message_date,
       double post_date,
@@ -232,8 +266,12 @@ abstract class _$$_PostsOfThreadsCopyWith<$Res>
       bool is_staff,
       bool is_admin,
       bool is_super_admin,
-      List<AttachmentsData>? Attachments});
+      List<AttachmentsData>? Attachments,
+      String view_url,
+      String message_state});
 
+  @override
+  $ThreadsCopyWith<$Res>? get Thread;
   @override
   $UserDataCopyWith<$Res>? get User;
 }
@@ -253,6 +291,7 @@ class __$$_PostsOfThreadsCopyWithImpl<$Res>
   $Res call({
     Object? message = freezed,
     Object? message_parsed = freezed,
+    Object? Thread = freezed,
     Object? position = freezed,
     Object? message_date = freezed,
     Object? post_date = freezed,
@@ -271,6 +310,8 @@ class __$$_PostsOfThreadsCopyWithImpl<$Res>
     Object? is_admin = freezed,
     Object? is_super_admin = freezed,
     Object? Attachments = freezed,
+    Object? view_url = freezed,
+    Object? message_state = freezed,
   }) {
     return _then(_$_PostsOfThreads(
       message: message == freezed
@@ -281,6 +322,10 @@ class __$$_PostsOfThreadsCopyWithImpl<$Res>
           ? _value.message_parsed
           : message_parsed // ignore: cast_nullable_to_non_nullable
               as String,
+      Thread: Thread == freezed
+          ? _value.Thread
+          : Thread // ignore: cast_nullable_to_non_nullable
+              as Threads?,
       position: position == freezed
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -353,6 +398,14 @@ class __$$_PostsOfThreadsCopyWithImpl<$Res>
           ? _value._Attachments
           : Attachments // ignore: cast_nullable_to_non_nullable
               as List<AttachmentsData>?,
+      view_url: view_url == freezed
+          ? _value.view_url
+          : view_url // ignore: cast_nullable_to_non_nullable
+              as String,
+      message_state: message_state == freezed
+          ? _value.message_state
+          : message_state // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -363,6 +416,7 @@ class _$_PostsOfThreads implements _PostsOfThreads {
   const _$_PostsOfThreads(
       {this.message = "",
       this.message_parsed = "",
+      this.Thread,
       this.position = 0,
       this.message_date = 0,
       this.post_date = 0,
@@ -380,7 +434,9 @@ class _$_PostsOfThreads implements _PostsOfThreads {
       this.is_staff = false,
       this.is_admin = false,
       this.is_super_admin = false,
-      final List<AttachmentsData>? Attachments})
+      final List<AttachmentsData>? Attachments,
+      this.view_url = "",
+      this.message_state = ""})
       : _tapi_reactions = tapi_reactions,
         _Attachments = Attachments;
 
@@ -393,6 +449,8 @@ class _$_PostsOfThreads implements _PostsOfThreads {
   @override
   @JsonKey()
   final String message_parsed;
+  @override
+  final Threads? Thread;
   @override
   @JsonKey()
   final int position;
@@ -459,8 +517,15 @@ class _$_PostsOfThreads implements _PostsOfThreads {
   }
 
   @override
+  @JsonKey()
+  final String view_url;
+  @override
+  @JsonKey()
+  final String message_state;
+
+  @override
   String toString() {
-    return 'PostsOfThreads(message: $message, message_parsed: $message_parsed, position: $position, message_date: $message_date, post_date: $post_date, thread_id: $thread_id, user_id: $user_id, post_id: $post_id, is_reacted_to: $is_reacted_to, visitor_reaction_id: $visitor_reaction_id, reaction_score: $reaction_score, User: $User, tapi_reactions: $tapi_reactions, conversation_id: $conversation_id, message_id: $message_id, attach_count: $attach_count, is_staff: $is_staff, is_admin: $is_admin, is_super_admin: $is_super_admin, Attachments: $Attachments)';
+    return 'PostsOfThreads(message: $message, message_parsed: $message_parsed, Thread: $Thread, position: $position, message_date: $message_date, post_date: $post_date, thread_id: $thread_id, user_id: $user_id, post_id: $post_id, is_reacted_to: $is_reacted_to, visitor_reaction_id: $visitor_reaction_id, reaction_score: $reaction_score, User: $User, tapi_reactions: $tapi_reactions, conversation_id: $conversation_id, message_id: $message_id, attach_count: $attach_count, is_staff: $is_staff, is_admin: $is_admin, is_super_admin: $is_super_admin, Attachments: $Attachments, view_url: $view_url, message_state: $message_state)';
   }
 
   @override
@@ -471,6 +536,7 @@ class _$_PostsOfThreads implements _PostsOfThreads {
             const DeepCollectionEquality().equals(other.message, message) &&
             const DeepCollectionEquality()
                 .equals(other.message_parsed, message_parsed) &&
+            const DeepCollectionEquality().equals(other.Thread, Thread) &&
             const DeepCollectionEquality().equals(other.position, position) &&
             const DeepCollectionEquality()
                 .equals(other.message_date, message_date) &&
@@ -498,7 +564,10 @@ class _$_PostsOfThreads implements _PostsOfThreads {
             const DeepCollectionEquality()
                 .equals(other.is_super_admin, is_super_admin) &&
             const DeepCollectionEquality()
-                .equals(other._Attachments, _Attachments));
+                .equals(other._Attachments, _Attachments) &&
+            const DeepCollectionEquality().equals(other.view_url, view_url) &&
+            const DeepCollectionEquality()
+                .equals(other.message_state, message_state));
   }
 
   @JsonKey(ignore: true)
@@ -507,6 +576,7 @@ class _$_PostsOfThreads implements _PostsOfThreads {
         runtimeType,
         const DeepCollectionEquality().hash(message),
         const DeepCollectionEquality().hash(message_parsed),
+        const DeepCollectionEquality().hash(Thread),
         const DeepCollectionEquality().hash(position),
         const DeepCollectionEquality().hash(message_date),
         const DeepCollectionEquality().hash(post_date),
@@ -524,7 +594,9 @@ class _$_PostsOfThreads implements _PostsOfThreads {
         const DeepCollectionEquality().hash(is_staff),
         const DeepCollectionEquality().hash(is_admin),
         const DeepCollectionEquality().hash(is_super_admin),
-        const DeepCollectionEquality().hash(_Attachments)
+        const DeepCollectionEquality().hash(_Attachments),
+        const DeepCollectionEquality().hash(view_url),
+        const DeepCollectionEquality().hash(message_state)
       ]);
 
   @JsonKey(ignore: true)
@@ -542,6 +614,7 @@ abstract class _PostsOfThreads implements PostsOfThreads {
   const factory _PostsOfThreads(
       {final String message,
       final String message_parsed,
+      final Threads? Thread,
       final int position,
       final double message_date,
       final double post_date,
@@ -559,7 +632,9 @@ abstract class _PostsOfThreads implements PostsOfThreads {
       final bool is_staff,
       final bool is_admin,
       final bool is_super_admin,
-      final List<AttachmentsData>? Attachments}) = _$_PostsOfThreads;
+      final List<AttachmentsData>? Attachments,
+      final String view_url,
+      final String message_state}) = _$_PostsOfThreads;
 
   factory _PostsOfThreads.fromJson(Map<String, dynamic> json) =
       _$_PostsOfThreads.fromJson;
@@ -568,6 +643,8 @@ abstract class _PostsOfThreads implements PostsOfThreads {
   String get message;
   @override
   String get message_parsed;
+  @override
+  Threads? get Thread;
   @override
   int get position;
   @override
@@ -604,6 +681,10 @@ abstract class _PostsOfThreads implements PostsOfThreads {
   bool get is_super_admin;
   @override
   List<AttachmentsData>? get Attachments;
+  @override
+  String get view_url;
+  @override
+  String get message_state;
   @override
   @JsonKey(ignore: true)
   _$$_PostsOfThreadsCopyWith<_$_PostsOfThreads> get copyWith =>
