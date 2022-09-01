@@ -21,6 +21,7 @@ _$_Threads _$$_ThreadsFromJson(Map<String, dynamic> json) => _$_Threads(
       Forum: json['Forum'] == null
           ? null
           : ForumResponse.fromJson(json['Forum'] as Map<String, dynamic>),
+      node_id: json['node_id'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$_ThreadsToJson(_$_Threads instance) =>
@@ -37,4 +38,5 @@ Map<String, dynamic> _$$_ThreadsToJson(_$_Threads instance) =>
       'view_count': instance.view_count,
       'view_url': instance.view_url,
       'Forum': instance.Forum,
+      'node_id': instance.node_id,
     };

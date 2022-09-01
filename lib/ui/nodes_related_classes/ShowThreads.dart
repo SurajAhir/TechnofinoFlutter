@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
@@ -34,7 +38,18 @@ class ShowThreads extends StatefulWidget {
 }
 
 class _ShowThreadsState extends State<ShowThreads> {
+  BranchContentMetaData metadata = BranchContentMetaData();
+  BranchUniversalObject? buo;
+  BranchLinkProperties lp = BranchLinkProperties();
+  BranchEvent? eventStandart;
+  BranchEvent? eventCustom;
+
+  StreamSubscription<Map>? streamSubscription;
+  StreamController<String> controllerData = StreamController<String>();
+  StreamController<String> controllerInitSession = StreamController<String>();
+
   RefreshController _refreshController =RefreshController(initialRefresh: false);
+
   final _scrollControllar = ScrollController();
   var _usernameControllar = TextEditingController();
   List<Threads> list = [];
@@ -43,7 +58,7 @@ class _ShowThreadsState extends State<ShowThreads> {
   var isFirstLoadingThreads = true;
   int page = 1;
   Pagination? pagination;
-
+ var isDataFound=true;
   String LastUpdateValue = 'Any time';
   String LastMessageValue = 'Last message';
   String AscOrDescValue = 'Descending';
@@ -71,6 +86,8 @@ var isFilterDataAvail=false;
   @override
   initState() {
     super.initState();
+    listenDynamicLinks();
+    initDeepLinkData();
     getData(page);
     _scrollControllar.addListener(() {
       debugPrint("scrooled");
@@ -123,7 +140,7 @@ var isFilterDataAvail=false;
             SizedBox(width: 8,)
           ],
         ),
-        body: Container(
+        body: isDataFound?Container(
           color: Theme.of(context).backgroundColor,
           child: Column(
             children:<Widget> [
@@ -306,7 +323,7 @@ var isFilterDataAvail=false;
                                      children: [
                                        Text(
                                          "${readTimestamp(
-                                             list[index].post_date.toInt())} • ",style: TextStyle(fontSize: 10),),
+                                             list[index].last_post_date.toInt())} • ",style: TextStyle(fontSize: 10),),
                                        Icon(Icons.remove_red_eye_sharp,size: 14,),
                                        Text("${NumberFormat.compact().format(list[index].view_count)} • ",style: TextStyle(fontSize: 10),),
 
@@ -349,7 +366,36 @@ var isFilterDataAvail=false;
                                                  Expanded(
                                                    child: ElevatedButton.icon(
                                                      onPressed: ()async {
-                                                       await Share.share(list[index].view_url.toString());
+                                                       generateLink(context,
+                                                           BranchUniversalObject(
+                                                               canonicalIdentifier: 'flutter/branch',
+                                                               canonicalUrl: 'https://technofino.in',
+                                                               title: 'TechnoFino Cummunity',
+                                                               imageUrl:"https://www.technofino.in/community/data/assets/footer_logo/cropped-cropped-Logo-PNG-1.png",
+                                                               contentMetadata: BranchContentMetaData()..addCustomMetadata("Thread",list[index].thread_id)
+                                                                 ..addCustomMetadata("thread_id", "1")
+                                                                 ..addCustomMetadata("title", widget.title)
+                                                                 ..addCustomMetadata("title1", widget.appBarTitle)
+                                                                 ..addCustomMetadata("threads", json.encode(list[index]))
+                                                                 ..addCustomMetadata("page", 1)
+                                                                 ..addCustomMetadata("title2", ""),
+                                                               contentDescription: '${list[index].view_url}',
+                                                               //contentMetadata: metadata,
+                                                               keywords: ['Plugin', 'Branch', 'Flutter'],
+                                                               publiclyIndex: true,
+                                                               locallyIndex: true,
+                                                               expirationDateInMilliSec: DateTime.now()
+                                                                   .add(const Duration(days: 365))
+                                                                   .millisecondsSinceEpoch),
+
+                                                           BranchLinkProperties(
+                                                               channel: 'facebook',
+                                                               feature: 'sharing',
+                                                               stage: 'new share',
+                                                               campaign: 'campaign',
+                                                               tags: ['one', 'two', 'three'])
+                                                             ..addControlParam('\$uri_redirect_mode', '1')
+                                                             ..addControlParam('referring_user_id', 'user_id'));
                                                      },
                                                      icon: Icon(
                                                        CupertinoIcons.share_up,
@@ -411,7 +457,7 @@ var isFilterDataAvail=false;
                                  child: Text(
                                    "${list[index].title}",
                                    style: TextStyle(
-                                       color: Colors.blue,fontSize: 15
+                                       color: provider.darkTheme?Color(0xfff0efef):Colors.blue,fontSize: 15,fontWeight: FontWeight.bold
                                    ),
                                  ),
                                ),
@@ -532,7 +578,10 @@ var isFilterDataAvail=false;
          )
             ],
           ),
-        ));
+        ):Center(
+          child: Text("There are no threads in this forum.",style: TextStyle(color: Theme.of(context).accentColor,fontSize: 18),),
+        )
+    );
   }
 
   String readTimestamp(int lastActivityData) {
@@ -605,6 +654,11 @@ var isFilterDataAvail=false;
     setState(() {
       isFirstLoadingThreads = false;
     });
+    if(list.isEmpty){
+      setState(() {
+        isDataFound = false;
+      });
+    }
   }
 
   getFilteredMessage(String message_parsed, PostsOfThreads post) {
@@ -848,5 +902,152 @@ var isFilterDataAvail=false;
         showModalBottomSheetForFilter(context);
       });
     }
+  }
+
+  void generateLink(BuildContext context, BranchUniversalObject buo,BranchLinkProperties lp) async {
+    BranchResponse response =
+    await FlutterBranchSdk.getShortUrl(buo: buo!, linkProperties: lp);
+    if (response.success) {
+      debugPrint(response.result);
+      await Share.share(response.result);
+    } else {
+      debugPrint('Error : ${response.errorCode} - ${response.errorMessage}');
+    }
+  }
+
+  void listenDynamicLinks() async {
+    streamSubscription = FlutterBranchSdk.initSession().listen((data) async {
+      print('listenDynamicLinks - DeepLink Data: $data');
+      controllerData.sink.add((data.toString()));
+      if (data.containsKey('+clicked_branch_link') &&
+          data['+clicked_branch_link'] == true) {
+        print(
+            '------------------------------------Link clicked----------------------------------------------');
+        print('Custom list number: ${data['custom_list_number']}');
+        print(
+            '------------------------------------------------------------------------------------------------');
+        if(data["thread_id"]=="1"){
+          var threads=json.decode(data["threads"]);
+          var th=Threads.fromJson(threads);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ShowPostsOfThreads(
+                          data["title"],
+                          data["title1"],
+                          th,
+                          1,
+                          data["title2"])));
+          debugPrint(threads["view_url"].toString());
+
+        }
+      }
+    }, onError: (error) {
+      print('InitSesseion error: ${error.toString()}');
+    });
+  }
+
+  void initDeepLinkData() {
+    metadata = BranchContentMetaData()
+      ..addCustomMetadata('custom_string', 'abc')
+      ..addCustomMetadata('custom_number', 12345)
+      ..addCustomMetadata('custom_bool', true)
+      ..addCustomMetadata('custom_list_number', [1, 2, 3, 4, 5])
+      ..addCustomMetadata('custom_list_string', ['a', 'b', 'c'])
+    //--optional Custom Metadata
+      ..contentSchema = BranchContentSchema.COMMERCE_PRODUCT
+      ..price = 50.99
+      ..currencyType = BranchCurrencyType.BRL
+      ..quantity = 50
+      ..sku = 'sku'
+      ..productName = 'productName'
+      ..productBrand = 'productBrand'
+      ..productCategory = BranchProductCategory.ELECTRONICS
+      ..productVariant = 'productVariant'
+      ..condition = BranchCondition.NEW
+      ..rating = 100
+      ..ratingAverage = 50
+      ..ratingMax = 100
+      ..ratingCount = 2
+      ..setAddress(
+          street: 'street',
+          city: 'city',
+          region: 'ES',
+          country: 'Brazil',
+          postalCode: '99999-987')
+      ..setLocation(31.4521685, -114.7352207);
+
+    buo = BranchUniversalObject(
+        canonicalIdentifier: 'flutter/branch',
+        //parameter canonicalUrl
+        //If your content lives both on the web and in the app, make sure you set its canonical URL
+        // (i.e. the URL of this piece of content on the web) when building any BUO.
+        // By doing so, we’ll attribute clicks on the links that you generate back to their original web page,
+        // even if the user goes to the app instead of your website! This will help your SEO efforts.
+        canonicalUrl: 'https://flutter.dev',
+        title: 'Flutter Branch Plugin',
+        imageUrl:"",
+        contentDescription: 'Flutter Branch Description',
+        /*
+        contentMetadata: BranchContentMetaData()
+          ..addCustomMetadata('custom_string', 'abc')
+          ..addCustomMetadata('custom_number', 12345)
+          ..addCustomMetadata('custom_bool', true)
+          ..addCustomMetadata('custom_list_number', [1, 2, 3, 4, 5])
+          ..addCustomMetadata('custom_list_string', ['a', 'b', 'c']),
+         */
+        //contentMetadata: metadata,
+        keywords: ['Plugin', 'Branch', 'Flutter'],
+        publiclyIndex: true,
+        locallyIndex: true,
+        expirationDateInMilliSec: DateTime.now()
+            .add(const Duration(days: 365))
+            .millisecondsSinceEpoch);
+
+    lp = BranchLinkProperties(
+        channel: 'facebook',
+        feature: 'sharing',
+        //parameter alias
+        //Instead of our standard encoded short url, you can specify the vanity alias.
+        // For example, instead of a random string of characters/integers, you can set the vanity alias as *.app.link/devonaustin.
+        // Aliases are enforced to be unique** and immutable per domain, and per link - they cannot be reused unless deleted.
+        //alias: 'https://branch.io' //define link url,
+        stage: 'new share',
+        campaign: 'campaign',
+        tags: ['one', 'two', 'three'])
+      ..addControlParam('\$uri_redirect_mode', '1')
+      ..addControlParam('referring_user_id', 'user_id');
+
+    eventStandart = BranchEvent.standardEvent(BranchStandardEvent.ADD_TO_CART)
+    //--optional Event data
+      ..transactionID = '12344555'
+      ..currency = BranchCurrencyType.BRL
+      ..revenue = 1.5
+      ..shipping = 10.2
+      ..tax = 12.3
+      ..coupon = 'test_coupon'
+      ..affiliation = 'test_affiliation'
+      ..eventDescription = 'Event_description'
+      ..searchQuery = 'item 123'
+      ..adType = BranchEventAdType.BANNER
+      ..addCustomData(
+          'Custom_Event_Property_Key1', 'Custom_Event_Property_val1')
+      ..addCustomData(
+          'Custom_Event_Property_Key2', 'Custom_Event_Property_val2');
+
+    eventCustom = BranchEvent.customEvent('Custom_event')
+      ..addCustomData(
+          'Custom_Event_Property_Key1', 'Custom_Event_Property_val1')
+      ..addCustomData(
+          'Custom_Event_Property_Key2', 'Custom_Event_Property_val2');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controllerData.close();
+    controllerInitSession.close();
+    streamSubscription?.cancel();
   }
 }

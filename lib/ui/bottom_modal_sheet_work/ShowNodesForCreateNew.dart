@@ -139,7 +139,7 @@ class _ShowNodesForCreateNewState extends State<ShowNodesForCreateNew> {
               // Future that needs to be resolved
               // inorder to display something on the Canvas
               future: ApiClient(Dio(BaseOptions(contentType: "application/json")))
-                  .getNodes(MyDataClass.api_key),
+                  .getNodes(MyDataClass.api_key,MyDataClass.isUserLoggedIn?MyDataClass.myUserId.toString():""),
             ),
           ))
         ],

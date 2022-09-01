@@ -12,9 +12,9 @@ class Styles {
 
       buttonColor: isDarkTheme ? Color(0xffb1aaaa) : Color(0xffb1aaaa),
       indicatorColor: isDarkTheme ? Colors.orangeAccent : Colors.orangeAccent,
-      backgroundColor: isDarkTheme ? Colors.black : Color(0xfff8f2f2),
+      backgroundColor: isDarkTheme ? Colors.black : Color(0xffD3D3D3),//f8f2f2
       accentColor: isDarkTheme ? Colors.white : Colors.black,
-      // fontFamily: "Schyler",
+      fontFamily: "",
 
       splashColor: isDarkTheme ? Colors.black: Colors.black,
 
@@ -32,7 +32,7 @@ class Styles {
       appBarTheme: AppBarTheme(
         elevation: 0.0,
         backgroundColor:isDarkTheme ? Colors.black: Colors.black,
-      ), textSelectionTheme: TextSelectionThemeData(selectionColor: isDarkTheme ? Colors.white : Colors.black),
+      ), textSelectionTheme: TextSelectionThemeData(selectionColor: isDarkTheme ?Colors.white70: Colors.black12),
 
     );
 

@@ -29,7 +29,7 @@ class _ExpandedReplyConversationState extends State<ExpandedReplyConversation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).bottomAppBarColor,
+      backgroundColor:  Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Container(
           color: Theme.of(context).backgroundColor,
@@ -106,7 +106,7 @@ class _ExpandedReplyConversationState extends State<ExpandedReplyConversation> {
               ),
               Expanded(
                 child:  Container(
-                  color:Theme.of(context).bottomAppBarColor,
+                  color:Theme.of(context).backgroundColor,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(
@@ -114,10 +114,15 @@ class _ExpandedReplyConversationState extends State<ExpandedReplyConversation> {
                       children:[
                         Container(
                           padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color:Theme.of(context).bottomAppBarColor,
+                            borderRadius: BorderRadius.all(Radius.circular(8))
+                          ),
+                          margin: EdgeInsets.all(6),
                           child: TextField(
                             controller: _messageControllar,
                             decoration: InputDecoration(
-                                hintText: "message".tr, border: InputBorder.none,
+                                hintText: "Write here...", border: InputBorder.none,
                             hintStyle: TextStyle(color: Theme.of(context).accentColor)),
                             keyboardType: TextInputType.multiline,
                             style: TextStyle(color: Theme.of(context).accentColor),
@@ -494,7 +499,7 @@ debugPrint(response.toString());
           children: <Widget>[
             InkWell(
               onTap: (){
-                var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
+                var attachmentString="\n"+r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]"""+"\n";
                 var mess=_messageControllar.text;
                 if(!mess.contains(attachmentString)){
                   _messageControllar.text=mess+attachmentString;

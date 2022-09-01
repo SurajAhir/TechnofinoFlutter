@@ -105,8 +105,9 @@ class _NotificationsState extends State<Notifications> {
                         controller: _scrollControllar,
                         itemBuilder: (context, index) {
                           return Container(
-                            color: Theme.of(context).bottomAppBarColor,
+                            color: list[index].read_date>0?Theme.of(context).bottomAppBarColor:provider.darkTheme?Color(0xff5f4f4f):Color(0xfff5f5f5),
                             padding: EdgeInsets.only(left: 5,right: 5,top: 3),
+                            margin: EdgeInsets.only(top: 4),
                             child: ListTile(
                                 leading: list[index].User!=null?list[index]
                                     .User!
@@ -172,7 +173,7 @@ class _NotificationsState extends State<Notifications> {
                                     child: Text(list[index].alert_text,
                                       style: TextStyle(fontSize: 14),)),
                                 subtitle: Text(
-                                  "${DateFormat('MM/dd/yyyy').format(
+                                  "${DateFormat('dd MMMM yyyy').format(
                                       DateTime.fromMillisecondsSinceEpoch(
                                           ((list[index].event_date) * 1000)
                                               .toInt()))}",
@@ -308,7 +309,7 @@ class _NotificationsState extends State<Notifications> {
   void getPostFromAlerts(BuildContext context, int content_id) async {
     var alertsResponse = await ApiClient(
         Dio(BaseOptions(contentType: "application/json"))).getPostOfAlerts(
-        MyDataClass.api_key, MyDataClass.myUserId, content_id);
+        MyDataClass.api_key, MyDataClass.myUserId, content_id.toString());
     var thread = alertsResponse.post.Thread;
     int position = alertsResponse.post.position;
     debugPrint(position.toString());
@@ -343,12 +344,12 @@ class _NotificationsState extends State<Notifications> {
     }
   }
 
-  void markRead(int conversation_id,bool val) async {
-    var conversationResponse =
+  void markRead(int alert_id,bool val) async {
+    var provider=Provider.of<MyProvider>(context,listen: false);
+    var alertResponse =
     await ApiClient(Dio(BaseOptions(contentType: "application/json")))
         .markReadAlerts(
-        MyDataClass.api_key, MyDataClass.myUserId, conversation_id,val);
-    setState(() {
-    });
+        MyDataClass.api_key, MyDataClass.myUserId, alert_id,val,true);
+    provider.getTotalAlertsCount();
   }
 }

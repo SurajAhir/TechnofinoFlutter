@@ -27,18 +27,15 @@ class ReplyOnPostsOfThreads extends StatefulWidget {
 }
 
 class _ReplyOnPostsOfThreadsState extends State<ReplyOnPostsOfThreads> {
-  var _firstMessageControllar = TextEditingController();
   var _lastMessageControllar = TextEditingController();
   List<AttachmentsData> attachmentList = [];
   String attachmentKey = "";
   var isGeneratedAttachmentKey = false;
-  var firstTextField=false;
-  var lastTextField=false;
   @override
   Widget build(BuildContext context) {
     var provider=Provider.of<MyProvider>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).bottomAppBarColor,
+      backgroundColor:Theme.of(context).backgroundColor,
       body: SafeArea(
         child:Container(
           color: Theme.of(context).backgroundColor,
@@ -100,7 +97,7 @@ class _ReplyOnPostsOfThreadsState extends State<ReplyOnPostsOfThreads> {
                           SizedBox(width: 10),
                           InkWell(
                               onTap: (){
-                                if(_firstMessageControllar.text.isNotEmpty||_lastMessageControllar.text.isNotEmpty){
+                                if(_lastMessageControllar.text.isNotEmpty){
                                   var message=widget.post.message;
                                   if(message.contains("[/QUOTE]")){
                                     var originalMessage=widget.post.message;
@@ -114,10 +111,10 @@ class _ReplyOnPostsOfThreadsState extends State<ReplyOnPostsOfThreads> {
                                     exactString=exactString.replaceAll(originalMessage,"");
                                     debugPrint(exactString);
                                     var realMessage="[QUOTE=\"${widget.post.User?.username}, post: ${widget.post.post_id}, member: ${widget.post.User?.user_id}\"]${exactString}[/QUOTE]";
-                                    postReply(context, _firstMessageControllar.text+realMessage+_lastMessageControllar.text);
+                                    postReply(context, realMessage+_lastMessageControllar.text);
                                   }else{
                                     var realMessage="[QUOTE=\"${widget.post.User?.username}, post: ${widget.post.post_id}, member: ${widget.post.User?.user_id}\"]${message}[/QUOTE]";
-                                    postReply(context, _firstMessageControllar.text+realMessage+_lastMessageControllar.text);
+                                    postReply(context, realMessage+_lastMessageControllar.text);
                                   }
                                 }
                               },
@@ -134,20 +131,21 @@ class _ReplyOnPostsOfThreadsState extends State<ReplyOnPostsOfThreads> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
-                        TextField(
-                          controller: _firstMessageControllar,
-                          onTap: (){
-                            firstTextField=true;
-                            lastTextField=false;
-                          },
-                          decoration:  InputDecoration(
-                              hintText: "message".tr, border: InputBorder.none,contentPadding: EdgeInsets.only(left: 8),
-                          hintStyle: TextStyle(color: Theme.of(context).accentColor)),
-                          keyboardType: TextInputType.multiline,
-                          minLines: 1,
-                          style: TextStyle(color: Theme.of(context).accentColor),
-                          maxLines: null,
-                        ),
+                        // TextField(
+                        //   controller: _firstMessageControllar,
+                        //   onTap: (){
+                        //     firstTextField=true;
+                        //     lastTextField=false;
+                        //   },
+                        //   decoration:  InputDecoration(
+                        //       hintText: "message".tr, border: InputBorder.none,contentPadding: EdgeInsets.only(left: 8),
+                        //   hintStyle: TextStyle(color: Theme.of(context).accentColor)),
+                        //   keyboardType: TextInputType.multiline,
+                        //   minLines: 1,
+                        //   style: TextStyle(color: Theme.of(context).accentColor),
+                        //   maxLines: null,
+                        // ),
+                        SizedBox(height: 10,),
                         Html(
                           data: getFilteredMessage(
                               widget.receivedMessage,
@@ -222,14 +220,15 @@ class _ReplyOnPostsOfThreadsState extends State<ReplyOnPostsOfThreads> {
                         ),
                         Container(
                           padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              color:Theme.of(context).bottomAppBarColor,
+                              borderRadius: BorderRadius.all(Radius.circular(0))
+                          ),
+                          margin: EdgeInsets.all(6),
                           child: TextField(
                             controller: _lastMessageControllar,
-                            onTap: (){
-                              firstTextField=false;
-                              lastTextField=true;
-                            },
                             decoration:  InputDecoration(
-                                hintText: "message".tr, border: InputBorder.none,hintStyle: TextStyle(color: Theme.of(context).accentColor)),
+                                hintText: "message".tr+"...", border: InputBorder.none,hintStyle: TextStyle(color: Theme.of(context).accentColor)),
                             keyboardType: TextInputType.multiline,
                             style: TextStyle(color: Theme.of(context).accentColor),
                             minLines: 8,
@@ -410,26 +409,54 @@ class _ReplyOnPostsOfThreadsState extends State<ReplyOnPostsOfThreads> {
 
   getFilteredMessage(String message_parsed, PostsOfThreads post) {
     var mess = message_parsed;
+    var blockquote = parse(message_parsed).querySelector("blockquote");
+    var blockquoteUsername = blockquote?.attributes["data-name"].toString();
     if (post.message_parsed.contains("<img")) {
       if (post.attach_count > 0) {
         var document = parse(message_parsed);
-        var image = post.Attachments;
-        List<String> imgThumbList = [];
-        image?.forEach((element) {
-          debugPrint(element.thumbnail_url);
-          imgThumbList.add(element.thumbnail_url);
-        });
+        var imgThumbList = post.Attachments;
         var imgList = document.querySelectorAll("img");
+        debugPrint(imgThumbList!.length.toString()+"---------------------------------");
+        debugPrint(imgList.length.toString()+"---------------------------------");
         int prev = 0;
-        for (int i = 0; i < imgList.length; i++) {
-          var src = imgList[i].attributes["src"];
-          prev = i + 1;
-          mess = mess.replaceAll(src!, imgThumbList[i]);
+
+        if (imgThumbList?.length == imgList.length) {
+          for (int i = 0; i < imgThumbList!.length; i++) {
+            for(int j=0;j<imgList.length;j++){
+              if(imgThumbList[i].filename==imgList[j].attributes["alt"]){
+                var src = imgList[j].attributes["src"];
+                prev = i + 1;
+                mess = mess.replaceAll(src!, imgThumbList[i].thumbnail_url);
+              }
+            }
+          }
         }
+        else if (imgThumbList.length < imgList.length) {
+          for (int i = 0; i < imgThumbList.length; i++) {
+            for(int j=0;j<imgList.length;j++){
+              if(imgThumbList[i].filename==imgList[j].attributes["alt"]){
+                var src = imgList[j].attributes["src"];
+                prev = i + 1;
+                mess = mess.replaceAll(src!, imgThumbList[i].thumbnail_url);
+              }
+            }
+          }
+        } else {
+          for (int i = 0; i < imgList.length; i++) {
+            for(int j=0;j<imgThumbList.length;j++){
+              if(imgThumbList[j].filename==imgList[i].attributes["alt"]){
+                var src = imgList[i].attributes["src"];
+                prev = i + 1;
+                mess = mess.replaceAll(src!, imgThumbList[j].thumbnail_url);
+              }
+            }
+          }
+        }
+
 
         if (post.attach_count > imgList.length) {
           for (int i = prev; i < imgThumbList.length; i++) {
-            var url = "<br /><img src='${imgThumbList[i]}'/>";
+            var url = "<br /><img src='${imgThumbList[i].thumbnail_url}'/>";
             mess = mess + url;
           }
         }
@@ -443,6 +470,7 @@ class _ReplyOnPostsOfThreadsState extends State<ReplyOnPostsOfThreads> {
         });
       }
     }
+    mess=mess.replaceAll(":ROFLMAO:", "🤣");
     return mess;
   }
 
@@ -648,26 +676,15 @@ showLoaderDialog(context,"Sending");
           children: <Widget>[
             InkWell(
               onTap: (){
-                var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
-             if(firstTextField){
-               var mess=_firstMessageControllar.text;
-               if(!mess.contains(attachmentString)){
-                 _firstMessageControllar.text=mess+attachmentString;
-                 Navigator.pop(context);
-                 setState((){
+                var attachmentString="\n"+r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]"""+"\n";
+                var mess=_lastMessageControllar.text;
+                if(!mess.contains(attachmentString)){
+                  _lastMessageControllar.text=mess+attachmentString;
+                  Navigator.pop(context);
+                  setState((){
 
-                 });
-               }
-             }else if(lastTextField){
-               var mess=_lastMessageControllar.text;
-               if(!mess.contains(attachmentString)){
-                 _lastMessageControllar.text=mess+attachmentString;
-                 Navigator.pop(context);
-                 setState((){
-
-                 });
-               }
-             }
+                  });
+                }
               },
               child: Row(
                 children: [
@@ -683,27 +700,15 @@ showLoaderDialog(context,"Sending");
               onTap: ()async{
                 debugPrint(attachmentList[index].attachment_id.toString());
                 var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
-                var firstmess=_firstMessageControllar.text;
                 var lastmess=_lastMessageControllar.text;
-                if(firstmess.contains(attachmentString)){
-                  _firstMessageControllar.text=firstmess.replaceAll(attachmentString,"");
-                  attachmentList.removeAt(index);
-                  Navigator.pop(context);
-                  if (attachmentList.isEmpty) {
-                    isGeneratedAttachmentKey = false;
-                    attachmentKey = "";
-                  }
-                  setState(() {});
-                }else if(lastmess.contains(attachmentString)){
-                  _lastMessageControllar.text=lastmess.replaceAll(attachmentString,"");
-                  attachmentList.removeAt(index);
-                  Navigator.pop(context);
-                  if (attachmentList.isEmpty) {
-                    isGeneratedAttachmentKey = false;
-                    attachmentKey = "";
-                  }
-                  setState(() {});
+                _lastMessageControllar.text=lastmess.replaceAll(attachmentString,"");
+                attachmentList.removeAt(index);
+                Navigator.pop(context);
+                if (attachmentList.isEmpty) {
+                  isGeneratedAttachmentKey = false;
+                  attachmentKey = "";
                 }
+                setState(() {});
                 // var deleteReponse=await http.delete(Uri.parse("https://technofino.in/community/api/attachments/${attachmentList[index].attachment_id}/"));
                 // var response=jsonDecode(deleteReponse.body) as Map;
                 // if(response["success"]){

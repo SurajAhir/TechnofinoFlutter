@@ -26,6 +26,7 @@ mixin _$ProfilePosts {
   List<ProfilePosts>? get LatestComments => throw _privateConstructorUsedError;
   int get comment_count => throw _privateConstructorUsedError;
   double get post_date => throw _privateConstructorUsedError;
+  double get comment_date => throw _privateConstructorUsedError;
   int get profile_user_id => throw _privateConstructorUsedError;
   int get profile_post_id => throw _privateConstructorUsedError;
   bool get is_reacted_to => throw _privateConstructorUsedError;
@@ -56,6 +57,7 @@ abstract class $ProfilePostsCopyWith<$Res> {
       List<ProfilePosts>? LatestComments,
       int comment_count,
       double post_date,
+      double comment_date,
       int profile_user_id,
       int profile_post_id,
       bool is_reacted_to,
@@ -87,6 +89,7 @@ class _$ProfilePostsCopyWithImpl<$Res> implements $ProfilePostsCopyWith<$Res> {
     Object? LatestComments = freezed,
     Object? comment_count = freezed,
     Object? post_date = freezed,
+    Object? comment_date = freezed,
     Object? profile_user_id = freezed,
     Object? profile_post_id = freezed,
     Object? is_reacted_to = freezed,
@@ -123,6 +126,10 @@ class _$ProfilePostsCopyWithImpl<$Res> implements $ProfilePostsCopyWith<$Res> {
       post_date: post_date == freezed
           ? _value.post_date
           : post_date // ignore: cast_nullable_to_non_nullable
+              as double,
+      comment_date: comment_date == freezed
+          ? _value.comment_date
+          : comment_date // ignore: cast_nullable_to_non_nullable
               as double,
       profile_user_id: profile_user_id == freezed
           ? _value.profile_user_id
@@ -197,6 +204,7 @@ abstract class _$$_ProfilePostsCopyWith<$Res>
       List<ProfilePosts>? LatestComments,
       int comment_count,
       double post_date,
+      double comment_date,
       int profile_user_id,
       int profile_post_id,
       bool is_reacted_to,
@@ -232,6 +240,7 @@ class __$$_ProfilePostsCopyWithImpl<$Res>
     Object? LatestComments = freezed,
     Object? comment_count = freezed,
     Object? post_date = freezed,
+    Object? comment_date = freezed,
     Object? profile_user_id = freezed,
     Object? profile_post_id = freezed,
     Object? is_reacted_to = freezed,
@@ -268,6 +277,10 @@ class __$$_ProfilePostsCopyWithImpl<$Res>
       post_date: post_date == freezed
           ? _value.post_date
           : post_date // ignore: cast_nullable_to_non_nullable
+              as double,
+      comment_date: comment_date == freezed
+          ? _value.comment_date
+          : comment_date // ignore: cast_nullable_to_non_nullable
               as double,
       profile_user_id: profile_user_id == freezed
           ? _value.profile_user_id
@@ -327,6 +340,7 @@ class _$_ProfilePosts implements _ProfilePosts {
       final List<ProfilePosts>? LatestComments,
       this.comment_count = 0,
       this.post_date = 0,
+      this.comment_date = 0,
       this.profile_user_id = 0,
       this.profile_post_id = 0,
       this.is_reacted_to = false,
@@ -369,6 +383,9 @@ class _$_ProfilePosts implements _ProfilePosts {
   @override
   @JsonKey()
   final double post_date;
+  @override
+  @JsonKey()
+  final double comment_date;
   @override
   @JsonKey()
   final int profile_user_id;
@@ -416,7 +433,7 @@ class _$_ProfilePosts implements _ProfilePosts {
 
   @override
   String toString() {
-    return 'ProfilePosts(message: $message, message_parsed: $message_parsed, position: $position, LatestComments: $LatestComments, comment_count: $comment_count, post_date: $post_date, profile_user_id: $profile_user_id, profile_post_id: $profile_post_id, is_reacted_to: $is_reacted_to, visitor_reaction_id: $visitor_reaction_id, reaction_score: $reaction_score, User: $User, tapi_reactions: $tapi_reactions, attach_count: $attach_count, Attachments: $Attachments, view_url: $view_url, profile_post_comment_id: $profile_post_comment_id)';
+    return 'ProfilePosts(message: $message, message_parsed: $message_parsed, position: $position, LatestComments: $LatestComments, comment_count: $comment_count, post_date: $post_date, comment_date: $comment_date, profile_user_id: $profile_user_id, profile_post_id: $profile_post_id, is_reacted_to: $is_reacted_to, visitor_reaction_id: $visitor_reaction_id, reaction_score: $reaction_score, User: $User, tapi_reactions: $tapi_reactions, attach_count: $attach_count, Attachments: $Attachments, view_url: $view_url, profile_post_comment_id: $profile_post_comment_id)';
   }
 
   @override
@@ -433,6 +450,8 @@ class _$_ProfilePosts implements _ProfilePosts {
             const DeepCollectionEquality()
                 .equals(other.comment_count, comment_count) &&
             const DeepCollectionEquality().equals(other.post_date, post_date) &&
+            const DeepCollectionEquality()
+                .equals(other.comment_date, comment_date) &&
             const DeepCollectionEquality()
                 .equals(other.profile_user_id, profile_user_id) &&
             const DeepCollectionEquality()
@@ -465,6 +484,7 @@ class _$_ProfilePosts implements _ProfilePosts {
       const DeepCollectionEquality().hash(_LatestComments),
       const DeepCollectionEquality().hash(comment_count),
       const DeepCollectionEquality().hash(post_date),
+      const DeepCollectionEquality().hash(comment_date),
       const DeepCollectionEquality().hash(profile_user_id),
       const DeepCollectionEquality().hash(profile_post_id),
       const DeepCollectionEquality().hash(is_reacted_to),
@@ -496,6 +516,7 @@ abstract class _ProfilePosts implements ProfilePosts {
       final List<ProfilePosts>? LatestComments,
       final int comment_count,
       final double post_date,
+      final double comment_date,
       final int profile_user_id,
       final int profile_post_id,
       final bool is_reacted_to,
@@ -523,6 +544,8 @@ abstract class _ProfilePosts implements ProfilePosts {
   int get comment_count;
   @override
   double get post_date;
+  @override
+  double get comment_date;
   @override
   int get profile_user_id;
   @override

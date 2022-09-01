@@ -62,212 +62,178 @@ class _ShowConversationsState extends State<ShowConversations> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).bottomAppBarColor,
-      body: SafeArea(
-        child: Container(
-          color: Theme.of(context).backgroundColor,
-          child: Column(
-            children: [
-              Material(
-                elevation: 15,
-                child: Container(
-                  height: 45,
-                  color: Theme.of(context).bottomAppBarColor,
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("conversations".tr,
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).accentColor,
-                              fontSize: 18)),
-                      // Container(
-                      //   alignment: Alignment.centerRight,
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.end,
-                      //     children: [
-                      //       Icon(
-                      //         Icons.filter_alt_outlined,
-                      //         color: Theme.of(context).accentColor,
-                      //         size: 24,
-                      //       ),
-                      //       SizedBox(
-                      //         width: 10,
-                      //       ),
-                      //       Image.asset(
-                      //         "assets/icons/edit_post.png",
-                      //         height: 20,
-                      //         width: 20,
-                      //         color: Theme.of(context).accentColor,
-                      //       ),
-                      //       SizedBox(
-                      //         width: 6,
-                      //       )
-                      //     ],
-                      //   ),
-                      // )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 1,
-              ),
-              isFirstLoadingConversations == false
-                  ? Expanded(
-                      child: Scaffold(
-                        backgroundColor: Theme.of(context).backgroundColor,
-                        body: SmartRefresher(
-                          enablePullDown: true,
-                          enablePullUp: false,
-                          controller: _refreshController,
-                          onRefresh: () async {
-                            debugPrint("refrshing...");
-                            page = 1;
-                            getData(page);
-                          },
-                          child: ListView.builder(
-                            controller: _scrollControllar,
-                            itemBuilder: (context, index) {
-                              return Slidable(
-                                key: const ValueKey(0),
+      appBar: AppBar(
+        title: Text("conversations".tr,
+            style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).accentColor,
+                fontSize: 18)),
+        backgroundColor: Theme.of(context).bottomAppBarColor,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).accentColor
+        ),
+        elevation: 10,
+      ),
+      body: Container(
+        color: Theme.of(context).backgroundColor,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 1,
+            ),
+            isFirstLoadingConversations == false
+                ? Expanded(
+                    child: Scaffold(
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      body: SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: false,
+                        controller: _refreshController,
+                        onRefresh: () async {
+                          debugPrint("refrshing...");
+                          page = 1;
+                          getData(page);
+                        },
+                        child: ListView.builder(
+                          controller: _scrollControllar,
+                          itemBuilder: (context, index) {
+                            return Slidable(
+                              key: const ValueKey(0),
 
-                                // The end action pane is the one at the right or the bottom side.
-                                endActionPane: ActionPane(
-                                  motion: ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        starConversation(
-                                            list,index);
-                                      },
-                                      spacing: 2,
-                                      backgroundColor: Colors.orangeAccent,
-                                      foregroundColor: Colors.white,
-                                      icon: list[index].is_starred?Icons.star:Icons.star_border_outlined,
-                                      label: list[index].is_starred?'Unstar':"Star",
-                                    ),
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        deleteConversation(
-                                            list,index);
-                                      },
-                                      spacing: 2,
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                      label: 'Delete',
-                                    ),
-                                  ],
-                                ),
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: 5, right: 5, top: 3),
-                                  color: Theme.of(context).bottomAppBarColor,
-                                  child: ListTile(
-                                    leading: list[index]
-                                            .Starter!
-                                            .avatar_urls
-                                            .o
-                                            .toString()
-                                            .isNotEmpty
-                                        ? InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          UserProfile(
-                                                              list[index]
-                                                                  .Starter!)));
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  list[index]
-                                                      .Starter!
-                                                      .avatar_urls
-                                                      .o),
+                              // The end action pane is the one at the right or the bottom side.
+                              endActionPane: ActionPane(
+                                motion: ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      starConversation(
+                                          list,index);
+                                    },
+                                    spacing: 2,
+                                    backgroundColor: Colors.orangeAccent,
+                                    foregroundColor: Colors.white,
+                                    icon: list[index].is_starred?Icons.star:Icons.star_border_outlined,
+                                    label: list[index].is_starred?'Unstar':"Star",
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      deleteConversation(
+                                          list,index);
+                                    },
+                                    spacing: 2,
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Delete',
+                                  ),
+                                ],
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: 5, right: 5, top: 3),
+                                color:list[index].is_unread?provider.darkTheme?Color(0xff5f4f4f):Color(0xfff5f5f5):Theme.of(context).bottomAppBarColor,//465
+                                child: ListTile(
+                                  leading: list[index]
+                                          .Starter!
+                                          .avatar_urls
+                                          .o
+                                          .toString()
+                                          .isNotEmpty
+                                      ? InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        UserProfile(
+                                                            list[index]
+                                                                .Starter!)));
+                                          },
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                list[index]
+                                                    .Starter!
+                                                    .avatar_urls
+                                                    .o),
+                                          ),
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        UserProfile(
+                                                            list[index]
+                                                                .Starter!)));
+                                          },
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                Colors.blueAccent,
+                                            child: Text(
+                                              "${list[index].Starter!.username.substring(0, 1)}",
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
+                                          ),
+                                        ),
+                                  title: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReplyConversation(
+                                                        list[index])));
+                                        markRead(list[index].conversation_id);
+                                      },
+                                      child: Text("${list[index].title}")),
+                                  trailing: Container(
+                                    width: 100,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "${readTimestamp(list[index].last_message_date.toInt())}",
+                                          style: TextStyle(fontSize: 11),
+                                        ),
+                                        if (list[index].is_unread)
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                        if (list[index].is_unread)
+                                          CircleAvatar(
+                                            backgroundColor:
+                                                provider.darkTheme
+                                                    ? Colors.white
+                                                    : Colors.black38,
+                                            radius: 4,
                                           )
-                                        : InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          UserProfile(
-                                                              list[index]
-                                                                  .Starter!)));
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.blueAccent,
-                                              child: Text(
-                                                "${list[index].Starter!.username.substring(0, 1)}",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                    title: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReplyConversation(
-                                                          list[index])));
-                                          markRead(list[index].conversation_id);
-                                        },
-                                        child: Text("${list[index].title}")),
-                                    trailing: Container(
-                                      width: 100,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "${readTimestamp(list[index].last_message_date.toInt())}",
-                                            style: TextStyle(fontSize: 11),
-                                          ),
-                                          if (list[index].is_unread)
-                                            SizedBox(
-                                              width: 3,
-                                            ),
-                                          if (list[index].is_unread)
-                                            CircleAvatar(
-                                              backgroundColor:
-                                                  provider.darkTheme
-                                                      ? Colors.white
-                                                      : Colors.black38,
-                                              radius: 4,
-                                            )
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                            itemCount: list.length,
-                          ),
+                              ),
+                            );
+                          },
+                          itemCount: list.length,
                         ),
                       ),
-                    )
-                  : isDataAvailbale == false
-                      ? const Center(child: CircularProgressIndicator())
-                      : Center(
-                          child: Text(
-                            "no_conversation_found".tr,
-                            style:
-                                TextStyle(color: Theme.of(context).accentColor),
-                          ),
+                    ),
+                  )
+                : isDataAvailbale == false
+                    ? const Center(child: CircularProgressIndicator())
+                    : Center(
+                        child: Text(
+                          "no_conversation_found".tr,
+                          style:
+                              TextStyle(color: Theme.of(context).accentColor),
                         ),
-              if (Provider.of<MyProvider>(context).isLoadingConversations)
-                const CircularProgressIndicator.adaptive()
-            ],
-          ),
+                      ),
+            if (Provider.of<MyProvider>(context).isLoadingConversations)
+              const CircularProgressIndicator.adaptive()
+          ],
         ),
       ),
     );
@@ -348,11 +314,14 @@ class _ShowConversationsState extends State<ShowConversations> {
   }
 
   void markRead(int conversation_id) async {
+    var provider=Provider.of<MyProvider>(context,listen: false);
     var conversationResponse =
         await ApiClient(Dio(BaseOptions(contentType: "application/json")))
             .markReadConversation(
                 MyDataClass.api_key, MyDataClass.myUserId, conversation_id);
-    setState(() {});
+    setState(() {
+      provider.getTotalConversationsCount();
+    });
   }
 
   void starConversation(List<Conversations> list, int index) async {

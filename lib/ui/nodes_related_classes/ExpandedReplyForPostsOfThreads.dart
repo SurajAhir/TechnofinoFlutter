@@ -32,7 +32,7 @@ class _ExpandedReplyForPostsOfThreadsState extends State<ExpandedReplyForPostsOf
   Widget build(BuildContext context) {
     var provider=Provider.of<MyProvider>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).bottomAppBarColor,
+      backgroundColor:Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Container(
           color: Theme.of(context).backgroundColor,
@@ -109,7 +109,7 @@ class _ExpandedReplyForPostsOfThreadsState extends State<ExpandedReplyForPostsOf
               ),
               Expanded(
                 child: Container(
-                  color: Theme.of(context).bottomAppBarColor,
+                  color:Theme.of(context).backgroundColor,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(
@@ -117,10 +117,15 @@ class _ExpandedReplyForPostsOfThreadsState extends State<ExpandedReplyForPostsOf
                         children:[
                           Container(
                             padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                                color:Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.all(Radius.circular(8))
+                            ),
+                            margin: EdgeInsets.all(6),
                             child: TextField(
                               controller: _messageControllar,
                               decoration:  InputDecoration(
-                                  hintText: "message".tr, border: InputBorder.none,hintStyle: TextStyle(color: Theme.of(context).accentColor)),
+                                  hintText: "message".tr+"...", border: InputBorder.none,hintStyle: TextStyle(color: Theme.of(context).accentColor)),
                               keyboardType: TextInputType.multiline,
                               minLines: 8,
                               style: TextStyle(color: Theme.of(context).accentColor),
@@ -498,7 +503,7 @@ debugPrint(message);
           children: <Widget>[
             InkWell(
               onTap: (){
-                var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
+                var attachmentString="\n"+r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]"""+"\n";
                 var mess=_messageControllar.text;
                 if(!mess.contains(attachmentString)){
                   _messageControllar.text=mess+attachmentString;

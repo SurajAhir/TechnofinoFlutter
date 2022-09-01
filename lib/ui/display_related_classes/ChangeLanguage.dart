@@ -23,8 +23,11 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
           "language".tr,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).accentColor),
         ),
-        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).bottomAppBarColor,
+        iconTheme: IconThemeData(
+            color: Theme.of(context).accentColor
+        ),
+        elevation: 10,
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,

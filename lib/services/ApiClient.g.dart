@@ -38,10 +38,13 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<NodeResponse> getNodes(api_key) async {
+  Future<NodeResponse> getNodes(api_key, user_id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'XF-Api-Key': api_key};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -287,7 +290,7 @@ class _ApiClient implements ApiClient {
   Future<NotificationResponse> getUnViewedAlerts(
       api_key, user_id, unread) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'unread': unread};
+    final queryParameters = <String, dynamic>{r'unviewed': unread};
     final _headers = <String, dynamic>{
       r'XF-Api-Key': api_key,
       r'XF-Api-User': user_id
@@ -326,7 +329,7 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<Map<String, bool>> postThread(
+  Future<CreateNewThreadResponse> postThread(
       api_key, user_id, node_id, title, message, attachment_key) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -342,7 +345,7 @@ class _ApiClient implements ApiClient {
       'attachment_key': attachment_key
     };
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<Map<String, bool>>(Options(
+        _setStreamType<CreateNewThreadResponse>(Options(
                 method: 'POST',
                 headers: _headers,
                 extra: _extra,
@@ -350,7 +353,7 @@ class _ApiClient implements ApiClient {
             .compose(_dio.options, 'threads/',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!.cast<String, bool>();
+    final value = CreateNewThreadResponse.fromJson(_result.data!);
     return value;
   }
 
@@ -658,7 +661,7 @@ class _ApiClient implements ApiClient {
 
   @override
   Future<Map<String, bool>> markReadAlerts(
-      api_key, user_id, conversation_id, read) async {
+      api_key, user_id, alert_id, read, viewed) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{
@@ -666,14 +669,14 @@ class _ApiClient implements ApiClient {
       r'XF-Api-User': user_id
     };
     _headers.removeWhere((k, v) => v == null);
-    final _data = {'read': read};
+    final _data = {'read': read, 'viewed': viewed};
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<Map<String, bool>>(Options(
                 method: 'POST',
                 headers: _headers,
                 extra: _extra,
                 contentType: 'application/x-www-form-urlencoded')
-            .compose(_dio.options, 'alerts/${conversation_id}/mark',
+            .compose(_dio.options, 'alerts/${alert_id}/mark',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data!.cast<String, bool>();
@@ -930,6 +933,54 @@ class _ApiClient implements ApiClient {
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, bool>> updateSpecificPost(
+      api_key, user_id, message, attachment_key, post_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'message': message, 'attachment_key': attachment_key};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, bool>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'posts/${post_id}/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, bool>();
+    return value;
+  }
+
+  @override
+  Future<Map<String, String>> generateAttachmentKeyForUpdateOfSpecificPost(
+      api_key, user_id, thread_id, type) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'XF-Api-Key': api_key,
+      r'XF-Api-User': user_id
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {'context[post_id]': thread_id, 'type': type};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, String>>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'attachments/new-key',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String, String>();
     return value;
   }
 

@@ -21,7 +21,8 @@ class Threads with _$Threads {
         @Default("") String username,
         @Default(0) int view_count,
         @Default("")String view_url,
-        ForumResponse? Forum
+        ForumResponse? Forum,
+        @Default(0)int node_id
       })=
   _Threads;
 

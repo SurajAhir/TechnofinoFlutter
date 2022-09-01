@@ -39,6 +39,11 @@ class _MyWebViewState extends State<MyWebView> {
                 child: Card(
                   elevation: 2,
                   child: Row(children: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                        child: Icon(CupertinoIcons.back,size: 24,color: Theme.of(context).accentColor,)),
                     SizedBox(width: 6,),
                     Icon(CupertinoIcons.lock,size: 24,color: Theme.of(context).accentColor,),
                     SizedBox(width: 3,),

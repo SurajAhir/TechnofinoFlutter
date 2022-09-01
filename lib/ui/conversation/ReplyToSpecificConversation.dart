@@ -645,7 +645,7 @@ showLoaderDialog(context, "Sending");
           children: <Widget>[
             InkWell(
               onTap: (){
-                var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
+                var attachmentString="\n"+r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]"""+"\n";
                 if(firstTextField){
                   var mess=_firstMessageControllar.text;
                   if(!mess.contains(attachmentString)){

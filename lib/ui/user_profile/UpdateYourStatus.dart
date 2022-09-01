@@ -498,7 +498,7 @@ class _UpdateYourStatusState extends State<UpdateYourStatus> {
           children: <Widget>[
             InkWell(
               onTap: (){
-                var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
+                var attachmentString="\n"+r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]"""+"\n";
                 var mess=_messageControllar.text;
                 if(!mess.contains(attachmentString)){
                   _messageControllar.text=mess+attachmentString;

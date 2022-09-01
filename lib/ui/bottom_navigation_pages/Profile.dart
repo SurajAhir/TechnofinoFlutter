@@ -26,7 +26,6 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     var darkThemeProvider=Provider.of<MyProvider>(context);
-    debugPrint(darkThemeProvider.darkTheme.toString());
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -280,7 +279,7 @@ class _ProfileState extends State<Profile> {
                   ),*/
                   InkWell(
                     onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>ChangeAppThem()));
+                      // Navigator.push(context,MaterialPageRoute(builder: (context)=>ChangeAppThem()));
                     },
 
                     child: ListTile(
@@ -297,15 +296,15 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         title: Text("dark_mode".tr),
-                        trailing:Container(
-                          width: 80,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Expanded(child: Text(darkThemeProvider.darkTheme?"on".tr:"off".tr,style: TextStyle(fontSize: 12,),)),
-                              Icon(Icons.keyboard_arrow_right)
-                            ],
-                          ),
+                        trailing:Switch(
+                          onChanged: (bool val){
+                            darkThemeProvider.darkTheme = !darkThemeProvider.darkTheme;
+                          },
+                          value:darkThemeProvider.darkTheme,
+                          activeColor: Colors.blue,
+                          activeTrackColor: Colors.yellow,
+                          inactiveThumbColor: Colors.black12,
+                          inactiveTrackColor: Colors.orange,
                         )
                     ),
                   ),
@@ -320,6 +319,23 @@ class _ProfileState extends State<Profile> {
                     child: ListTile(
                       leading: Image.asset("assets/icons/youtube_icon.png",width: 26,height: 26,),
                       title: Text("Youtube"),
+                      trailing:Icon(Icons.keyboard_arrow_right) ,
+                    ),
+                  ),
+
+                  InkWell(
+                    onTap: () async{
+                      var _url="http://technofino.in";
+                      if (!await launch(_url)) {
+                        throw 'Could not launch $_url';
+                      }
+                    },
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 13,
+                          backgroundColor: darkThemeProvider.darkTheme?Colors.black:Colors.black12,
+                          child: Image.asset("assets/images/technofino.png",width: 26,height: 26,color: darkThemeProvider.darkTheme?Colors.white:Colors.black,)),
+                      title: Text("TechnoFino Blog"),
                       trailing:Icon(Icons.keyboard_arrow_right) ,
                     ),
                   ),
@@ -445,7 +461,7 @@ class _ProfileState extends State<Profile> {
                     style: TextStyle(fontSize: 12, color:Theme.of(context).accentColor),
                   ),
                   Text(
-                    "2022.07.23 (143)",
+                    "2022.1.0",
                     style: TextStyle(fontSize: 12, color: darkThemeProvider.darkTheme?Colors.white:Color(0xff8c8787)),
                   )
                 ],

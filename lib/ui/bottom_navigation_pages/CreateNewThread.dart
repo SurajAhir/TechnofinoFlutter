@@ -8,13 +8,15 @@ import 'package:get/get_utils/get_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:technofino/provider/MyProvider.dart';
-
 import '../../data_classes/attachment_response/AttachmentsData.dart';
+import '../../data_classes/thread_response/Threads.dart';
 import '../../main_data_class/MyDataClass.dart';
+import '../../provider/MyProvider.dart';
 import '../../services/ApiClient.dart';
 import '../bottom_modal_sheet_work/ShowNodesForCreateNew.dart';
+import 'dart:convert' as convert;
 
+import '../nodes_related_classes/ShowPostsOfThreads.dart';
 class CreateNewThread extends StatefulWidget {
   const CreateNewThread({Key? key}) : super(key: key);
 
@@ -383,11 +385,12 @@ class _CreateNewThreadState extends State<CreateNewThread> {
         await ApiClient(Dio(BaseOptions(contentType: "application/json")))
             .postThread(MyDataClass.api_key, MyDataClass.myUserId, node_id,
                 title, message, attachmentKey);
-    if (response["success"] == true) {
+    if (response.success) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Done'),
       ));
+      var thread=response.thread;
       setState(() {
         _titleControllar.text = "";
         _messageControllar.text = "";
@@ -395,8 +398,33 @@ class _CreateNewThreadState extends State<CreateNewThread> {
         title = "";
         node_id = 0;
       });
-    } else {
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) =>
+              ShowPostsOfThreads(
+                  thread.Forum !=
+                      null
+                      ? thread
+                      .Forum!
+                      .breadcrumbs![
+                  0]
+                      .title
+                      .toString()
+                      : "",
+                  thread.Forum !=
+                      null
+                      ? thread
+                      .Forum!
+                      .title
+                      : "",
+                  thread,
+                  1,
+                  "")));
+    }
+    else {
       Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Something went wrong!'),
+      ));
     }
   }
 
@@ -576,7 +604,7 @@ class _CreateNewThreadState extends State<CreateNewThread> {
           children: <Widget>[
             InkWell(
               onTap: (){
-                var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
+                var attachmentString="\n"+r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]"""+"\n";
                 var mess=_messageControllar.text;
                 if(!mess.contains(attachmentString)){
                   _messageControllar.text=mess+attachmentString;

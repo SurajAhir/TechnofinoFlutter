@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:technofino/data_classes/post_response/PostsOfThreadResponse.dart';
+import 'package:technofino/data_classes/thread_response/CreateNewThreadResponse.dart';
 import 'package:technofino/data_classes/thread_response/ThreadResponse.dart';
 import '../data_classes/attachment_response/AttachmentsData.dart';
 import '../data_classes/conversation_response/ConversationMessages.dart';
@@ -14,6 +15,7 @@ import '../data_classes/notification_response/PostFromNotification.dart';
 import '../data_classes/post_response/PostsOfThreads.dart';
 import '../data_classes/react_response/ReactData.dart';
 import '../data_classes/thread_response/FilterData.dart';
+import '../data_classes/thread_response/Threads.dart';
 import '../data_classes/user_profile_posts_response/ProfilePostsResponse.dart';
 
 part 'ApiClient.g.dart';
@@ -33,6 +35,7 @@ abstract class ApiClient {
   @GET("nodes/")
   Future<NodeResponse> getNodes(
   @Header("XF-Api-Key") String api_key,
+  @Header("XF-Api-User") String user_id,
   );
 
   @GET("forums/{id}/threads/")
@@ -123,19 +126,19 @@ abstract class ApiClient {
   Future<NotificationResponse> getUnViewedAlerts(
   @Header("XF-Api-Key") String api_key,
   @Header("XF-Api-User") int user_id,
-  @Query("unread")bool unread
+  @Query("unviewed")bool unread
   );
 
   @GET("posts/{id}/")
   Future<PostFromNotification> getPostOfAlerts(
   @Header("XF-Api-Key") String api_key,
   @Header("XF-Api-User") int user_id,
-  @Path("id") int content_id
+  @Path("id") String content_id
   );
 
   @POST("threads/")
   @FormUrlEncoded()
-  Future<Map<String, bool>> postThread(
+  Future<CreateNewThreadResponse> postThread(
   @Header("XF-Api-Key") String api_key,
   @Header("XF-Api-User") int user_id,
   @Field("node_id")int  node_id,
@@ -257,8 +260,9 @@ abstract class ApiClient {
   Future<Map<String, bool>>  markReadAlerts(
   @Header("XF-Api-Key") String api_key,
   @Header("XF-Api-User") int user_id,
-  @Path("id") int conversation_id,
-  @Field("read")bool read
+  @Path("id") int alert_id,
+  @Field("read")bool read,
+  @Field("viewed")bool viewed,
   );
 
   @POST("me/avatar")
@@ -371,4 +375,24 @@ abstract class ApiClient {
   @Field("conversation_open") bool conversation_open,
   @Field("open_invite")bool open_invite,
   );
+
+
+  @POST("posts/{id}/")
+  @FormUrlEncoded()
+  Future<Map<String,bool>> updateSpecificPost(
+      @Header("XF-Api-Key") String api_key,
+      @Header("XF-Api-User") int user_id,
+      @Field("message")String message,
+      @Field("attachment_key") String attachment_key,
+      @Path("id") int post_id,
+      );
+
+  @POST("attachments/new-key")
+  @FormUrlEncoded()
+  Future<Map<String, String>> generateAttachmentKeyForUpdateOfSpecificPost(
+      @Header("XF-Api-Key") String api_key,
+      @Header("XF-Api-User") int user_id,
+      @Field("context[post_id]")int thread_id,
+      @Field("type")String type
+      );
 }

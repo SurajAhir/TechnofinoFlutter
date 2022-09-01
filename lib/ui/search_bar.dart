@@ -146,7 +146,7 @@ var threads=[];
                               children: [
                                 Text(
                                   "${readTimestamp(
-                                      threads[index].post_date.toInt())} • ",style: TextStyle(fontSize: 10),),
+                                      threads[index].last_post_date.toInt())} • ",style: TextStyle(fontSize: 10),),
                                 Icon(Icons.remove_red_eye_sharp,size: 14,),
                                 Text("${NumberFormat.compact().format(threads[index].view_count)} • ",style: TextStyle(fontSize: 10),),
 
@@ -249,7 +249,7 @@ var threads=[];
                             "${threads[index].title}",
                             style: TextStyle(
                                 color:
-                                Colors.blue,fontSize: 15
+                                provider.darkTheme?Color(0xfff0efef):Colors.blue,fontSize: 15,fontWeight: FontWeight.bold
                             ),
                           ),
                         ),

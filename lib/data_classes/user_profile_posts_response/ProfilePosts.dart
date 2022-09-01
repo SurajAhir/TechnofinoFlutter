@@ -16,6 +16,7 @@ class ProfilePosts with _$ProfilePosts {
     List<ProfilePosts>? LatestComments,
     @Default(0)int comment_count,
     @Default(0)double post_date,
+    @Default(0)double comment_date,
     @Default(0)int profile_user_id,
     @Default(0)int profile_post_id,
     @Default(false)bool is_reacted_to,

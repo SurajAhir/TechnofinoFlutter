@@ -27,7 +27,7 @@ class _WriteSomethingState extends State<WriteSomething> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).bottomAppBarColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Container(
           color: Theme.of(context).backgroundColor,
@@ -104,19 +104,23 @@ class _WriteSomethingState extends State<WriteSomething> {
               ),
               Expanded(
                 child:  Container(
-                  color: Theme.of(context).bottomAppBarColor,
+                  color: Theme.of(context).backgroundColor,
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                         children:[
                           Container(
                             padding: EdgeInsets.all(6),
-                            color: Theme.of(context).bottomAppBarColor,
+                            decoration: BoxDecoration(
+                                color:Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.all(Radius.circular(8))
+                            ),
+                            margin: EdgeInsets.all(6),
                             child: TextField(
                               controller: _messageControllar,
                               style: TextStyle(color: Theme.of(context).accentColor),
                               decoration: InputDecoration(
-                                  hintText: "message".tr, border: InputBorder.none,
+                                  hintText: "message".tr+"...", border: InputBorder.none,
                               hintStyle: TextStyle(color: Theme.of(context).accentColor)),
                               keyboardType: TextInputType.multiline,
                               minLines: 8,
@@ -494,7 +498,7 @@ class _WriteSomethingState extends State<WriteSomething> {
           children: <Widget>[
             InkWell(
               onTap: (){
-                var attachmentString=r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]""";
+                var attachmentString="\n"+r"""[ATTACH type="full"]"""+attachmentList[index].attachment_id.toString()+r"""[/ATTACH]"""+"\n";
                 var mess=_messageControllar.text;
                 if(!mess.contains(attachmentString)){
                   _messageControllar.text=mess+attachmentString;

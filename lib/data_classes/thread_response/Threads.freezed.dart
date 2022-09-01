@@ -32,6 +32,7 @@ mixin _$Threads {
   int get view_count => throw _privateConstructorUsedError;
   String get view_url => throw _privateConstructorUsedError;
   ForumResponse? get Forum => throw _privateConstructorUsedError;
+  int get node_id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -54,7 +55,8 @@ abstract class $ThreadsCopyWith<$Res> {
       String username,
       int view_count,
       String view_url,
-      ForumResponse? Forum});
+      ForumResponse? Forum,
+      int node_id});
 
   $UserDataCopyWith<$Res> get User;
   $ForumResponseCopyWith<$Res>? get Forum;
@@ -82,6 +84,7 @@ class _$ThreadsCopyWithImpl<$Res> implements $ThreadsCopyWith<$Res> {
     Object? view_count = freezed,
     Object? view_url = freezed,
     Object? Forum = freezed,
+    Object? node_id = freezed,
   }) {
     return _then(_value.copyWith(
       last_post_username: last_post_username == freezed
@@ -132,6 +135,10 @@ class _$ThreadsCopyWithImpl<$Res> implements $ThreadsCopyWith<$Res> {
           ? _value.Forum
           : Forum // ignore: cast_nullable_to_non_nullable
               as ForumResponse?,
+      node_id: node_id == freezed
+          ? _value.node_id
+          : node_id // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 
@@ -172,7 +179,8 @@ abstract class _$$_ThreadsCopyWith<$Res> implements $ThreadsCopyWith<$Res> {
       String username,
       int view_count,
       String view_url,
-      ForumResponse? Forum});
+      ForumResponse? Forum,
+      int node_id});
 
   @override
   $UserDataCopyWith<$Res> get User;
@@ -203,6 +211,7 @@ class __$$_ThreadsCopyWithImpl<$Res> extends _$ThreadsCopyWithImpl<$Res>
     Object? view_count = freezed,
     Object? view_url = freezed,
     Object? Forum = freezed,
+    Object? node_id = freezed,
   }) {
     return _then(_$_Threads(
       last_post_username: last_post_username == freezed
@@ -253,6 +262,10 @@ class __$$_ThreadsCopyWithImpl<$Res> extends _$ThreadsCopyWithImpl<$Res>
           ? _value.Forum
           : Forum // ignore: cast_nullable_to_non_nullable
               as ForumResponse?,
+      node_id: node_id == freezed
+          ? _value.node_id
+          : node_id // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -272,7 +285,8 @@ class _$_Threads implements _Threads {
       this.username = "",
       this.view_count = 0,
       this.view_url = "",
-      this.Forum});
+      this.Forum,
+      this.node_id = 0});
 
   factory _$_Threads.fromJson(Map<String, dynamic> json) =>
       _$$_ThreadsFromJson(json);
@@ -311,10 +325,13 @@ class _$_Threads implements _Threads {
   final String view_url;
   @override
   final ForumResponse? Forum;
+  @override
+  @JsonKey()
+  final int node_id;
 
   @override
   String toString() {
-    return 'Threads(last_post_username: $last_post_username, title: $title, reply_count: $reply_count, post_date: $post_date, last_post_id: $last_post_id, User: $User, thread_id: $thread_id, last_post_date: $last_post_date, username: $username, view_count: $view_count, view_url: $view_url, Forum: $Forum)';
+    return 'Threads(last_post_username: $last_post_username, title: $title, reply_count: $reply_count, post_date: $post_date, last_post_id: $last_post_id, User: $User, thread_id: $thread_id, last_post_date: $last_post_date, username: $username, view_count: $view_count, view_url: $view_url, Forum: $Forum, node_id: $node_id)';
   }
 
   @override
@@ -338,7 +355,8 @@ class _$_Threads implements _Threads {
             const DeepCollectionEquality()
                 .equals(other.view_count, view_count) &&
             const DeepCollectionEquality().equals(other.view_url, view_url) &&
-            const DeepCollectionEquality().equals(other.Forum, Forum));
+            const DeepCollectionEquality().equals(other.Forum, Forum) &&
+            const DeepCollectionEquality().equals(other.node_id, node_id));
   }
 
   @JsonKey(ignore: true)
@@ -356,7 +374,8 @@ class _$_Threads implements _Threads {
       const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(view_count),
       const DeepCollectionEquality().hash(view_url),
-      const DeepCollectionEquality().hash(Forum));
+      const DeepCollectionEquality().hash(Forum),
+      const DeepCollectionEquality().hash(node_id));
 
   @JsonKey(ignore: true)
   @override
@@ -382,7 +401,8 @@ abstract class _Threads implements Threads {
       final String username,
       final int view_count,
       final String view_url,
-      final ForumResponse? Forum}) = _$_Threads;
+      final ForumResponse? Forum,
+      final int node_id}) = _$_Threads;
 
   factory _Threads.fromJson(Map<String, dynamic> json) = _$_Threads.fromJson;
 
@@ -410,6 +430,8 @@ abstract class _Threads implements Threads {
   String get view_url;
   @override
   ForumResponse? get Forum;
+  @override
+  int get node_id;
   @override
   @JsonKey(ignore: true)
   _$$_ThreadsCopyWith<_$_Threads> get copyWith =>

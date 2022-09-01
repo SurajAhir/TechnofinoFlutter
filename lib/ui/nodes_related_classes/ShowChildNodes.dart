@@ -88,7 +88,255 @@ class _ShowChildNodesState extends State<ShowChildNodes> {
                 child: Container(
                   margin: EdgeInsets.only(bottom: 8, top: 5),
                   child: ListTile(
-                    leading: Icon(Icons.messenger_outline),
+                    leading: widget.obj[index].title.toString().contains("Announcements")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/announcement.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("General Discussion")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/general.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Finance World News")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/finance_world_news.jpg",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Twitter Spaces")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/twitter_space.png",
+                      height: 28,
+                      width: 28,
+                    ):
+                    widget.obj[index].title.toString().contains("Just For Fun")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/just_for_fun.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Review & Experience")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/review_and_experience.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Mod Only Forum")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/mod_only_forum.png",
+                      height: 34,
+                      width: 34,
+                    ):
+                    widget.obj[index].title.toString().contains("Informational Threads")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/informational_thread.png",
+                      height: 34,
+                      width: 34,
+                    ):
+                    widget.obj[index].title.toString().contains("Credit Card Reviews On")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/credit_card_review_on_technoFino.png",
+                      height: 32,
+                      width: 32,
+                    ):
+                    widget.obj[index].title.toString().contains("Credit Cards")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/credit_cards.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Bank Account")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/bank_account.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Debit Card")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/debit_card.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Credit Score")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/credit_score.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("BNPL Cards")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/bnpl_cards.png",
+                      height: 32,
+                      width: 32,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Prepaid Card/")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/prepaid_card_wallet_card.png",
+                      height: 28,
+                      width: 28,
+                    ):
+                    widget.obj[index].title.toString().contains("Banking Complaint")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/banking_complaint.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("UPI")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/upi.png",
+                      height: 28,
+                      width: 28,
+                    ):
+                    widget.obj[index].title.toString().contains("Loan")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/loan.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Agent Section")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/agent_section.png",
+                      height: 28,
+                      width: 28,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("How To Maximise Card")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/how_to_maximize_card_reward.png",
+                      height: 34,
+                      width: 34,
+                    ):
+                    widget.obj[index].title.toString().contains("Credit Card Offers")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/credit_card_offer.png",
+                      height: 30,
+                      width: 30,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("App Offers /")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/app_offer.jpg",
+                      height: 34,
+                      width: 34,
+                    ):
+                    widget.obj[index].title.toString().contains("Other Offers")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/other_offer.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Donate Your Voucher/")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/donate_your_voucher.jpg",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Flight & Hotel Booking")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/flight_and_hotel_booking_offer.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Investment")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/investment.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Insurance")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/insurance.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Tax")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/tax.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Airmiles & Credit Card")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/airmiles_and_credit_card.jpg",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Hotel Loyalty Program")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/hotel_loyalty_program_and_credit_card.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Lounge/Hotel Reviews")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/lounge_and_hotel_review.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Travel Hacks")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/travel_hacks.png",
+                      height: 34,
+                      width: 34,
+                    ):
+                    widget.obj[index].title.toString().contains("Personal Travel Experience")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/personal_travel_experience.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("Foreign Credit Card")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/foreign_credit_cards.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("VIP Credit Card Lounge")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/vip_credit_card_lounge.png",
+                      height: 34,
+                      width: 34,
+                      color: Theme.of(context).accentColor,
+                    ):
+                    widget.obj[index].title.toString().contains("VIP General Lounge")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/vip_general_lounge.png",
+                      height: 34,
+                      width: 34,
+                    ):
+                    widget.obj[index].title.toString().contains("Invite Only")
+                        ? Image.asset(
+                      "assets/icons/technofino_nodes_icons/invite.png",
+                      height: 34,
+                      width: 34,
+                    ):
+                    Icon(Icons.messenger_outline),
                     title: Text(
                       widget.obj[index].title.toString(),
                       style:TextStyle(color: Theme.of(context).accentColor),

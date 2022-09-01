@@ -23,13 +23,15 @@ class ShowNodes extends StatefulWidget {
 class _ShowNodesState extends State<ShowNodes> {
   @override
   Widget build(BuildContext context) {
-    var provider=Provider.of<MyProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text(
           "Forums",
-          style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).bottomAppBarColor,
       ),
@@ -115,8 +117,64 @@ class _ShowNodesState extends State<ShowNodes> {
                                       list1ForChildSubNode)));
                         },
                         child: ListTile(
-                          leading: Icon(Icons.folder_outlined),
-                          title: Text("${obj[0].title}"),
+                          leading: index == 0
+                              ? Image.asset(
+                                  "assets/icons/technofino_nodes_icons/general.png",
+                                  height: 28,
+                                  width: 28,
+                            color: Theme.of(context).accentColor,
+                                )
+                              :
+                          index == 1
+                              ? Image.asset(
+                            "assets/icons/technofino_nodes_icons/exclusive_content_by_family.png",
+                            height: 32,
+                            width: 32,
+                            color: Theme.of(context).accentColor,
+                          ):
+                          index == 2
+                                  ? Image.asset(
+                                      "assets/icons/technofino_nodes_icons/banking.png",
+                                      height: 26,
+                                      width: 26,
+                            color: Theme.of(context).accentColor,
+                                    )
+                                  : index == 3
+                              ? Image.asset(
+                            "assets/icons/technofino_nodes_icons/offers.png",
+                            height: 32,
+                            width: 32,
+                            color: Theme.of(context).accentColor,
+                          ):
+                          index == 4
+                              ? Image.asset(
+                            "assets/icons/technofino_nodes_icons/personal_finance.png",
+                            height: 28,
+                            width: 28,
+                            color: Theme.of(context).accentColor,
+                          ):
+                          index == 5
+                              ? Image.asset(
+                            "assets/icons/technofino_nodes_icons/traveling.png",
+                            height: 28,
+                            width: 28,
+                            color: Theme.of(context).accentColor,
+                          ):
+                          index == 6
+                              ? Image.asset(
+                            "assets/icons/technofino_nodes_icons/foreign_bank_account_and_credit_cards.png",
+                            height: 28,
+                            width: 28,
+                            color: Theme.of(context).accentColor,
+                          ):
+                          index == 7
+                              ? Image.asset(
+                            "assets/icons/technofino_nodes_icons/technoFino_vip_lounge.png",
+                            height: 28,
+                            width: 28,
+                            color: Theme.of(context).accentColor,
+                          ):Icon(Icons.folder_outlined),
+                          title: Text("${obj[0].title}",style: TextStyle(fontWeight: FontWeight.bold),),
                           trailing: Icon(Icons.keyboard_arrow_right),
                         ),
                       );
@@ -132,7 +190,7 @@ class _ShowNodesState extends State<ShowNodes> {
           // Future that needs to be resolved
           // inorder to display something on the Canvas
           future: ApiClient(Dio(BaseOptions(contentType: "application/json")))
-              .getNodes(MyDataClass.api_key),
+              .getNodes(MyDataClass.api_key,MyDataClass.isUserLoggedIn?MyDataClass.myUserId.toString():""),
         ),
       ),
     );

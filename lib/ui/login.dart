@@ -291,6 +291,7 @@ class _LoginState extends State<Login> {
       var data = await client.login(MyDataClass.api_key, email, password);
       if (data != null) {
         MyDataClass.loginResponse = data.user as UserData;
+        MyDataClass.myUserId=data.user.user_id;
         final prefs = await SharedPreferences.getInstance();
         prefs.setBool("isLoggedIn", true);
         prefs.setString("email", email);
@@ -332,6 +333,7 @@ class _LoginState extends State<Login> {
         var user = response["user"] as UserData;
         if (user != null) {
           MyDataClass.loginResponse = user;
+          MyDataClass.myUserId=user.user_id;
           final prefs = await SharedPreferences.getInstance();
           prefs.setBool("isLoggedIn", true);
           prefs.setString("email", email);
@@ -386,6 +388,7 @@ class _LoginState extends State<Login> {
               var user = response["user"] as UserData;
               if (user != null) {
                 MyDataClass.loginResponse = user;
+                MyDataClass.myUserId=user.user_id;
                 final prefs = await SharedPreferences.getInstance();
                 prefs.setBool("isLoggedIn", true);
                 prefs.setString("email", email);

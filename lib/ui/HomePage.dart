@@ -28,9 +28,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int pageIndex = 0;
-  int totalAlerts=0;
-  var isAlertsAvail=false;
-  var isNetworkAvail=false;
+  var isNetworkAvail=true;
   final pages = [
     const ShowHomeThreads(),
     const ShowNodes(),
@@ -45,10 +43,10 @@ class _HomePageState extends State<HomePage> {
   initState() {
     super.initState();
     checkConnectivity();
-    getTotalAlertsCount();
   }
   @override
   Widget build(BuildContext context) {
+    var provider=Provider.of<MyProvider>(context);
     return isNetworkAvail?Scaffold(
       bottomNavigationBar: Container(
         height: 50,
@@ -117,8 +115,8 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               icon:pageIndex==3? Badge(
-                showBadge: isAlertsAvail,
-                badgeContent: Text('$totalAlerts'),
+                showBadge: provider.isAlertsAvail,
+                badgeContent: Text('${provider.totalAlerts}'),
                 child: Icon(
                   Icons.notifications_none,
                   color: Theme.of(context).indicatorColor,
@@ -126,10 +124,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               )
                   :Badge(
-                showBadge: isAlertsAvail,
+                showBadge: provider.isAlertsAvail,
                 alignment: Alignment.topRight,
                 badgeColor: Colors.orangeAccent,
-                badgeContent: Text('$totalAlerts'),
+                badgeContent: Text('${provider.totalAlerts}'),
                 child: Icon(
                   Icons.notifications_none,
                   color: Theme.of(context).buttonColor,
@@ -165,31 +163,7 @@ class _HomePageState extends State<HomePage> {
     ):NoNetwork();
   }
 
-  void getTotalAlertsCount() async{
-    var prefs=await SharedPreferences.getInstance();
-    var isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
-    if (isLoggedIn) {
-      var email = prefs.getString("email").toString();
-      var response =
-      await ApiClient(Dio(BaseOptions(contentType: "application/json")))
-          .findUserEmail(MyDataClass.api_key, 1, email);
-      MyDataClass.loginResponse = response["user"] as UserData;
-      MyDataClass.isUserLoggedIn = true;
-      MyDataClass.myUserId=(response["user"] as UserData).user_id;
-      var responseAlerts=await ApiClient(Dio(BaseOptions(contentType: "application/json"))).getUnViewedAlerts(MyDataClass.api_key, MyDataClass.myUserId, true);
-      var pagination=responseAlerts.pagination as Pagination;
-      if(pagination.total>0){
-        setState((){
-          isAlertsAvail=true;
-          totalAlerts=pagination.total;
-        });
-      }
-
-    }
-
-  }
-
-  void checkConnectivity() async{
+  void checkConnectivity(){
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (result == ConnectivityResult.mobile) {
         isNetworkAvail=true;
